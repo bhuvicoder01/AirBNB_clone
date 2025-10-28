@@ -31,8 +31,8 @@ const SearchBar = ({ compact = false }) => {
             type="text"
             className="form-control border-0 fw-semibold"
             placeholder="Start your search"
-            onClick={() => navigate('/search')}
-            readOnly
+            // onClick={() => navigate('/search')}
+            // readOnly
           />
           <button className="btn btn-danger rounded-circle " onClick={() => navigate('/search')}>
             <i className="bi bi-search text-white"></i>
