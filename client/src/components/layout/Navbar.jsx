@@ -15,7 +15,7 @@ const Navbar = () => {
         {/* Logo */}
         <Link to="/" className="navbar-brand d-flex align-items-center">
           <i className="bi bi-house-heart-fill text-danger fs-3 me-2"></i>
-          <span className="fw-bold airbnb-logo">airbnb</span>
+          <span className="fw-bold airbnb-logo">AirBnB</span>
         </Link>
 
         {/* Search Bar - Desktop */}

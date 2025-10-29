@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { authAPI, userAPI } from '../services/api';
 
 const AuthContext = createContext();
 
@@ -23,37 +24,52 @@ export const AuthProvider = ({ children }) => {
       setIsAuthenticated(true);
     }
     setLoading(false);
+    checkAuth();
   }, []);
 
+  const checkAuth=async () => {
+    const id=(JSON.parse(localStorage.getItem('user')))._id
+    const response=await authAPI.checkAuth(id);
+     setUser(response.data.user);
+      setIsAuthenticated(true);
+  }
   const login = async (email, password) => {
-    // TODO: Replace with actual API call
-    // Mock login logic
-    const mockUser = {
-      id: 1,
+    const credentials={
       email,
-      name: 'John Doe',
-      role: 'guest',
-      avatar: 'https://i.pravatar.cc/150?img=33'
-    };
-    
-    setUser(mockUser);
+      password
+    }
+    const response=await authAPI.login(credentials)
+    if(response.data){
+    const user=response.data.user
+    setUser(user);
     setIsAuthenticated(true);
-    localStorage.setItem('user', JSON.stringify(mockUser));
-    return mockUser;
+    localStorage.setItem('user', JSON.stringify(user));
+    return user;
+    }
+
+    
+    
   };
 
   const register = async (userData) => {
-    // TODO: Replace with actual API call
-    const newUser = {
-      ...userData,
-      id: Date.now(),
-      avatar: 'https://i.pravatar.cc/150'
-    };
-    
+   try{ 
+    const response=await authAPI.register(userData)
+    if(response.data){
+    const newUser=response.data.user
     setUser(newUser);
     setIsAuthenticated(true);
     localStorage.setItem('user', JSON.stringify(newUser));
     return newUser;
+    }
+    else{
+      console.log("no response from the server")
+
+    }
+  }
+    catch(error){
+      console.error(error)
+      return null;
+    }
   };
 
   const logout = () => {
@@ -62,10 +78,20 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('user');
   };
 
-  const updateProfile = (updates) => {
+  const updateProfile =async (updates) => {
     const updatedUser = { ...user, ...updates };
-    setUser(updatedUser);
-    localStorage.setItem('user', JSON.stringify(updatedUser));
+    try{const response=await userAPI.updateProfile(updatedUser)
+  
+
+    if(response.status===200){
+      setUser(response.data.user);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+    }}
+    catch(error){
+      console.error(error)
+
+    }
+   
   };
 
   const value = {

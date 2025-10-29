@@ -34,8 +34,8 @@ const UserMenu = () => {
         <i className="bi bi-list fs-5"></i>
         {isAuthenticated && user ? (
           <img
-            src={user.avatar}
-            alt={user.name}
+            src={user?.avatar?.url}
+            alt={user?.firstName}
             className="rounded-circle"
             style={{ width: '32px', height: '32px' }}
           />
