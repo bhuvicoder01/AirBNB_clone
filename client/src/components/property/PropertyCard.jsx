@@ -5,12 +5,12 @@ import { useWishlist } from '../../contexts/WishlistContext';
 const PropertyCard = ({ property }) => {
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const inWishlist = isInWishlist(property.id);
+  const inWishlist = isInWishlist(property._id);
 
   const handleWishlistToggle = (e) => {
     e.preventDefault();
     if (inWishlist) {
-      removeFromWishlist(property.id);
+      removeFromWishlist(property._id);
     } else {
       addToWishlist(property);
     }
@@ -31,7 +31,7 @@ const PropertyCard = ({ property }) => {
   };
 
   return (
-    <Link to={`/property/${property.id}`} className="text-decoration-none text-dark">
+    <Link to={`/property/${property._id}`} className="text-decoration-none text-dark">
       <div className="property-card mb-4">
         {/* Image Carousel */}
         <div className="position-relative property-image-container">

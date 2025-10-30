@@ -11,9 +11,18 @@ const PropertyDetailsPage = () => {
   const { getPropertyById } = useProperty();
   const [property, setProperty] = useState(null);
 
+  const propertyData=async(id)=>{
+    console.log(id)
+     const property=await getPropertyById(id)
+
+    setProperty(property);
+    console.log(property)
+
+    };
   useEffect(() => {
-    const propertyData = getPropertyById(id);
-    setProperty(propertyData);
+    console.log(id)
+    propertyData(id)
+    
   }, [id]);
 
   if (!property) {

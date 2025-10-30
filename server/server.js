@@ -5,6 +5,7 @@ const MongoDB = require('./services/db');
 require('dotenv').config();
 const authRoutes=require('./routes/auth')
 const userRoutes=require('./routes/user')
+const propertyRoutes=require('./routes/property')
 const cors=require('cors')
 
 
@@ -27,6 +28,7 @@ MongoDB.connect(process.env.MONGODB_URI)
 
 app.use('/api/auth',authRoutes)
 app.use('/api/users',userRoutes)
+app.use('/api/properties',propertyRoutes)
 
 
 app.use('/api',async (req,res) => {

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { mockProperties } from '../data/mockData';
+import { propertyAPI } from '../services/api';
 
 const PropertyContext = createContext();
 
@@ -24,13 +25,32 @@ export const PropertyProvider = ({ children }) => {
     amenities: []
   });
 
+  const getProperties=async () => {
+      const propertiesServer=await propertyAPI.getAll()
+      console.log("serverproperties")
+      setProperties(propertiesServer.data)
+      localStorage.setItem('properties',JSON.stringify(propertiesServer.data))
+      return propertiesServer
+      console.log(propertiesServer.data)
+    }
+
   useEffect(() => {
-    // TODO: Replace with actual API call
-    // Load mock properties
+   
     setTimeout(() => {
-      setProperties(mockProperties);
-      setLoading(false);
+      try{ 
+        const storedProperties=JSON.parse(localStorage.getItem('properties'))
+      if(storedProperties){
+        console.log("storeed")
+        setProperties(storedProperties);
+        setLoading(false);
+      }
+    }
+      catch(error){
+        setProperties(mockProperties)
+      }
+      getProperties()      
     }, 500);
+    
   }, []);
 
   const searchProperties = (searchFilters) => {
@@ -69,9 +89,11 @@ export const PropertyProvider = ({ children }) => {
     return filtered;
   };
 
-  const getPropertyById = (id) => {
-    // TODO: Replace with actual API call
-    return properties.find(p => p.id === parseInt(id));
+  const getPropertyById =async (id) => {
+    console.log(id)
+    const property=( await propertyAPI.getById(id)).data
+    console.log(property.data)
+    return property;
   };
 
   const value = {

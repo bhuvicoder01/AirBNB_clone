@@ -9,7 +9,7 @@ const PropertyDetails = ({ property }) => {
         <div className="d-flex flex-wrap align-items-center gap-3 text-muted">
           <span>
             <i className="bi bi-star-fill text-warning me-1"></i>
-            {property.rating.overall} ({property.reviews_count} reviews)
+            {property?.rating?.overall} ({property.reviews_count} reviews)
           </span>
           <span>·</span>
           <span className="text-decoration-underline">
