@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 // API Base URL - Change this when you have a backend
+const API_URL = import.meta.env.VITE_API_URL || 'https://airbnb-clone-2cp7.onrender.com/api';
 
 // Create axios instance with default config
 const api = axios.create({
