@@ -16,7 +16,7 @@ app.use(express.json())
 app.use(cookieParser())
 
 app.use(cors({
-    origin:'https://airbnb-clone-phi-jade.vercel.app/',
+    origin:'https://airbnb-clone-phi-jade.vercel.app',
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Explicitly allow methods
     allowedHeaders: ['Content-Type', 'Authorization'], // Allow necessary headers
