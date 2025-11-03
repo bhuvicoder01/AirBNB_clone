@@ -6,6 +6,7 @@ require('dotenv').config();
 const authRoutes=require('./routes/auth')
 const userRoutes=require('./routes/user')
 const propertyRoutes=require('./routes/property')
+const bookingRoutes=require('./routes/booking')
 const cors=require('cors')
 
 
@@ -16,7 +17,7 @@ app.use(express.json())
 app.use(cookieParser())
 
 app.use(cors({
-    origin:'https://airbnb-clone-phi-jade.vercel.app',
+    origin:['https://airbnb-clone-phi-jade.vercel.app','http://localhost:5173'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Explicitly allow methods
     allowedHeaders: ['Content-Type', 'Authorization'], // Allow necessary headers
@@ -29,6 +30,7 @@ MongoDB.connect(process.env.MONGODB_URI)
 app.use('/api/auth',authRoutes)
 app.use('/api/users',userRoutes)
 app.use('/api/properties',propertyRoutes)
+app.use('/api/bookings',bookingRoutes)
 
 
 app.use('/api',async (req,res) => {

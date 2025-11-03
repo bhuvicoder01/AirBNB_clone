@@ -27,7 +27,7 @@ export const PropertyProvider = ({ children }) => {
 
   const getProperties=async () => {
       const propertiesServer=await propertyAPI.getAll()
-      console.log("serverproperties")
+      // console.log("serverproperties")
       setProperties(propertiesServer.data)
       localStorage.setItem('properties',JSON.stringify(propertiesServer.data))
       return propertiesServer
@@ -40,7 +40,7 @@ export const PropertyProvider = ({ children }) => {
       try{ 
         const storedProperties=JSON.parse(localStorage.getItem('properties'))
       if(storedProperties){
-        console.log("storeed")
+        // console.log("storeed")
         setProperties(storedProperties);
         setLoading(false);
       }

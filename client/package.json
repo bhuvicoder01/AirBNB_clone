@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start:dev": "env-cmd -f .env.development react-scripts start",
+    "build:prod": "env-cmd -f .env.production react-scripts build"
   },
   "dependencies": {
     "axios": "^1.6.2",

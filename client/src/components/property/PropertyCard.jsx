@@ -100,7 +100,7 @@ const PropertyCard = ({ property }) => {
             </div>
           </div>
           <div className="mt-2">
-            <span className="fw-bold">${property.price_per_night}</span>
+            <span className="fw-bold">₹{property.price_per_night}</span>
             <span className="text-muted"> night</span>
           </div>
         </div>

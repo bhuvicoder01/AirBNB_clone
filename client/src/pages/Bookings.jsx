@@ -1,22 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useBooking } from '../contexts/BookingContext';
 import { Link } from 'react-router-dom';
 import Card from '../components/common/Card';
 import Button from '../components/common/Button';
+import Loading from '../components/common/Loading';
 
 const Bookings = () => {
   const { user } = useAuth();
-  const { getUserBookings, cancelBooking } = useBooking();
+  const {isLoading, userBookings, cancelBooking } = useBooking();
   
-  const bookings = user ? getUserBookings(user.id) : [];
+  // console.log(user?._id)
+  const bookings = userBookings||[]
+  // console.log(bookings)
   const upcomingBookings = bookings.filter(b => 
-    b.status === 'confirmed' && new Date(b.checkIn) > new Date()
+    b?.status === 'confirmed' && new Date(b?.checkIn) > new Date() 
   );
   const pastBookings = bookings.filter(b => 
-    b.status === 'completed' || new Date(b.checkOut) < new Date()
+    b?.status === 'completed' || new Date(b?.checkOut) < new Date()
   );
-  const cancelledBookings = bookings.filter(b => b.status === 'cancelled');
+  const cancelledBookings = bookings?.filter(b => b?.status === 'cancelled');
 
   const handleCancelBooking = (bookingId) => {
     if (window.confirm('Are you sure you want to cancel this booking?')) {
@@ -40,14 +43,14 @@ const Bookings = () => {
             <h5 className="card-title">{booking.propertyTitle}</h5>
             <p className="text-muted mb-2">
               <i className="bi bi-calendar me-2"></i>
-              {booking.checkIn} - {booking.checkOut}
+              {new Date(booking.checkIn).toLocaleDateString()} - {new Date(booking.checkOut).toLocaleDateString()}
             </p>
             <p className="text-muted mb-2">
               <i className="bi bi-people me-2"></i>
               {booking.guests} {booking.guests === 1 ? 'guest' : 'guests'}
             </p>
             <p className="fw-bold mb-3">
-              Total: ${booking.totalPrice}
+              Total: ₹{booking.totalPrice}
             </p>
             
             <div className="d-flex gap-2">
@@ -60,7 +63,7 @@ const Bookings = () => {
                 <Button 
                   variant="warning" 
                   size="sm"
-                  onClick={() => handleCancelBooking(booking.id)}
+                  onClick={() => handleCancelBooking(booking._id)}
                 >
                   Cancel Booking
                 </Button>
@@ -77,7 +80,8 @@ const Bookings = () => {
     </Card>
   );
 
-  return (
+  return (<>
+  {isLoading ? <Loading />:
     <div className="container mt-4">
       <h2 className="mb-4">My Bookings</h2>
 
@@ -88,7 +92,7 @@ const Bookings = () => {
         </h4>
         {upcomingBookings.length > 0 ? (
           upcomingBookings.map(booking => (
-            <BookingCard key={booking.id} booking={booking} />
+            <BookingCard key={booking._id} booking={booking} />
           ))
         ) : (
           <Card>
@@ -110,7 +114,7 @@ const Bookings = () => {
         </h4>
         {pastBookings.length > 0 ? (
           pastBookings.map(booking => (
-            <BookingCard key={booking.id} booking={booking} />
+            <BookingCard key={booking._id} booking={booking} />
           ))
         ) : (
           <p className="text-muted">No past bookings</p>
@@ -124,12 +128,12 @@ const Bookings = () => {
             Cancelled Bookings ({cancelledBookings.length})
           </h4>
           {cancelledBookings.map(booking => (
-            <BookingCard key={booking.id} booking={booking} />
+            <BookingCard key={booking._id} booking={booking} />
           ))}
         </div>
       )}
     </div>
-  );
+}</> );
 };
 
 export default Bookings;

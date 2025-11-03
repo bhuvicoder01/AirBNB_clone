@@ -12,7 +12,7 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('user'))|null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -25,6 +25,7 @@ export const AuthProvider = ({ children }) => {
     }
     setLoading(false);
     checkAuth();
+    
   }, []);
 
   const checkAuth=async () => {

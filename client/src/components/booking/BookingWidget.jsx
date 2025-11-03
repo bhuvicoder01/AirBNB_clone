@@ -9,13 +9,14 @@ import { calculateTotalPrice } from '../../utils/priceCalculator';
 
 const BookingWidget = ({ property }) => {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { user,isAuthenticated } = useAuth();
   const { createBooking } = useBooking();
   
   const [checkIn, setCheckIn] = useState(null);
   const [checkOut, setCheckOut] = useState(null);
   const [guests, setGuests] = useState(1);
   const [showCalendar, setShowCalendar] = useState(false);
+
 
   const nights = checkIn && checkOut ? calculateNights(checkIn, checkOut) : 0;
   const pricing = nights > 0 ? calculateTotalPrice(property.price_per_night, nights) : null;
@@ -33,16 +34,17 @@ const BookingWidget = ({ property }) => {
 
     try {
       await createBooking({
-        propertyId: property.id,
+        propertyId: property._id,
         propertyTitle: property.title,
         checkIn,
         checkOut,
         guests,
         totalPrice: pricing.total,
-        userId: 1 // TODO: Get from auth context
+        userId: user._id // TODO: Get from auth context
       });
       
       navigate('/bookings');
+      window.location.reload()
     } catch (error) {
       console.error('Booking failed:', error);
       alert('Failed to create booking. Please try again.');
@@ -55,7 +57,7 @@ const BookingWidget = ({ property }) => {
         {/* Price */}
         <div className="d-flex justify-content-between align-items-center mb-4">
           <div>
-            <span className="h4 fw-bold">${property.price_per_night}</span>
+            <span className="h4 fw-bold">₹{property.price_per_night}</span>
             <span className="text-muted"> night</span>
           </div>
           <div className="d-flex align-items-center gap-1">

@@ -3,7 +3,7 @@ const propertyModel = require("../models/Property")
 class propertyController{
     static getAll=async (req,res) => {
         const properties=await propertyModel.find({})
-        console.log(properties)
+        // console.log(properties)
         return res.json(properties)
     }
     static getById=async (req,res) => {
