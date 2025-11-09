@@ -33,7 +33,7 @@ export const BookingProvider = ({ children }) => {
   
   useEffect(() => {
 
-    (getUserBookings(user._id))
+    (getUserBookings(user?._id))
     // Load bookings from localStorage
     const storedBookings = localStorage.getItem('bookings');
     if (storedBookings) {

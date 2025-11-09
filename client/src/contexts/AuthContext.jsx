@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const checkAuth=async () => {
-    const id=(JSON.parse(localStorage.getItem('user')))._id
+    const id=(JSON.parse(localStorage.getItem('user')))?._id
     const response=await authAPI.checkAuth(id);
      setUser(response.data.user);
       setIsAuthenticated(true);
