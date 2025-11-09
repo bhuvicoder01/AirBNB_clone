@@ -13,15 +13,31 @@ const SearchResults = () => {
   useEffect(() => {
     const filters = {
       location: searchParams.get('location') || '',
-      checkIn: searchParams.get('checkIn'),
-      checkOut: searchParams.get('checkOut'),
+      checkIn: searchParams.get('checkIn') || null,
+      checkOut: searchParams.get('checkOut') || null,
       adults: parseInt(searchParams.get('adults')) || 1,
-      children: parseInt(searchParams.get('children')) || 0
+      children: parseInt(searchParams.get('children')) || 0,
+      infants: parseInt(searchParams.get('infants')) || 0
     };
 
-    const results = searchProperties(filters);
-    setFilteredProperties(results);
-  }, [searchParams]);
+    // Handle search from compact search bar (location only)
+    if (!filters.checkIn && !filters.checkOut) {
+      const results = searchProperties({
+        location: filters.location,
+        // Use default values for dates and guests
+        checkIn: null,
+        checkOut: null,
+        adults: 1,
+        children: 0,
+        infants: 0
+      });
+      setFilteredProperties(results);
+    } else {
+      // Handle full search with all filters
+      const results = searchProperties(filters);
+      setFilteredProperties(results);
+    }
+  }, [searchParams, searchProperties]);
 
   const handleFilterChange = (newFilters) => {
     const results = searchProperties(newFilters);

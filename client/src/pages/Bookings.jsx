@@ -5,9 +5,11 @@ import { Link } from 'react-router-dom';
 import Card from '../components/common/Card';
 import Button from '../components/common/Button';
 import Loading from '../components/common/Loading';
+import { useProperty } from '../contexts/PropertyContext';
 
 const Bookings = () => {
   const { user } = useAuth();
+  const{properties}=useProperty();
   const {isLoading, userBookings, cancelBooking } = useBooking();
   
   // console.log(user?._id)
@@ -32,7 +34,7 @@ const Bookings = () => {
       <div className="row g-0">
         <div className="col-md-4">
           <img
-            src="https://images.unsplash.com/photo-1566073771259-6a8506099945"
+            src={properties.filter(p=>p._id===booking.propertyId)[0]?.images[0]}
             className="img-fluid rounded-start h-100"
             alt={booking.propertyTitle}
             style={{ objectFit: 'cover' }}

@@ -69,7 +69,7 @@ const Footer = () => {
                 <i className="bi bi-globe me-1"></i> English (US)
               </button>
               <button className="btn btn-link text-muted text-decoration-none p-0">
-                <i className="bi bi-currency-dollar me-1"></i> USD
+                <i className="bi bi-currency-rupee me-1"></i> INR
               </button>
               <div className="d-flex gap-2">
                 <a href="#" className="text-muted"><i className="bi bi-facebook fs-5"></i></a>

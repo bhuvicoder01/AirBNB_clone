@@ -54,12 +54,25 @@ export const authAPI = {
 
 // Properties
 export const propertyAPI = {
+  // General property endpoints
   getAll: (params) => api.get('/properties', { params }),
   getById: (id) => api.get(`/properties/${id}`),
-  create: (propertyData) => api.post('/properties', propertyData),
+  search: (filters) => api.get('/properties/search', { params: filters }),
+
+  // Host property endpoints
+  getHostProperties: () => api.get('/properties/host/properties'),
+  getPropertiesByHostId: (hostId) => api.get(`/properties/host/${hostId}/properties`),
+  create: (formData) => api.post('/properties/create', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  }),
   update: (id, propertyData) => api.put(`/properties/${id}`, propertyData),
   delete: (id) => api.delete(`/properties/${id}`),
-  search: (filters) => api.post('/properties/search', filters)
+  toggleStatus: (id) => api.patch(`/properties/${id}/toggle-status`),
+  
+  // Analytics endpoints for hosts
+  getHostStats: () => api.get('/properties/host/stats')
 };
 
 // Bookings
@@ -82,6 +95,9 @@ export const reviewAPI = {
 // Users
 export const userAPI = {
   getProfile: () => api.get('/users/profile'),
+  getUsersWishList:(userId)=>api.get(`/users/${userId}/wishlist`),
+  addToWishlist:(wishlistData)=>api.post('/users/wishlist',wishlistData),
+  removeFromWishList:(propertyId,userId)=>api.delete(`/users/${userId}/wishlist/${propertyId}`),
   updateProfile: (userData) => api.put('/users/profile', userData),
   uploadAvatar: (formData) => api.post('/users/avatar', formData, {
     headers: { 'Content-Type': 'multipart/form-data' }

@@ -58,7 +58,7 @@ export const PropertyProvider = ({ children }) => {
     
     // TODO: Replace with actual API call
     // Mock filtering logic
-    let filtered = mockProperties;
+    let filtered = properties;
 
     if (searchFilters.location) {
       filtered = filtered.filter(p => 

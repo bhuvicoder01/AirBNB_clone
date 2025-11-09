@@ -12,7 +12,7 @@ const Home = () => {
     { name: "Cabins", icon: "bi-house-door" },
     { name: "Trending", icon: "bi-fire" },
     { name: "Pools", icon: "bi-droplet" },
-    { name: "Mountains", icon: "bi-mountains" },
+    { name: "Mountains", icon: "fas fa-mountain" },
     { name: "Unique stays", icon: "bi-star" },
   ];
 
@@ -49,7 +49,7 @@ const Home = () => {
               style={{ minWidth: "100px" }}
             >
               <div className="category-item p-3 border rounded hover-shadow">
-                <i className={`bi ${category.icon} fs-3 d-block mb-2`}></i>
+                <i className={`${category.icon} fs-3 d-block mb-2`}></i>
                 <small className="fw-semibold">{category.name}</small>
               </div>
             </Link>

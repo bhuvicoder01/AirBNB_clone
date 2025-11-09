@@ -1,6 +1,11 @@
 const mongoose=require('mongoose')
 
 const propertySchema=mongoose.Schema({
+    hostId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users',
+        required: true
+    },
     title: String,
     description:String,
     location: {
@@ -24,14 +29,15 @@ const propertySchema=mongoose.Schema({
       response_time: String
     },
     rating: {
-      overall: Number,
-      cleanliness: Number,
-      accuracy: Number,
-      communication: Number,
-      location: Number,
-      value: Number
+      overall:{type: Number,default:0},
+      cleanliness: {type: Number,default:0},
+      accuracy: {type: Number,default:0},
+      communication:{type: Number,default:0},
+      location: {type: Number,default:0},
+      value: {type: Number,default:0}
     },
-    reviews_count: Number
+    reviews_count: Number,
+    isActive:Boolean
 },{timestamps:true})
 
 const propertyModel=mongoose.model('properties',propertySchema)

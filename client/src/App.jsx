@@ -16,6 +16,8 @@ import Bookings from './pages/Bookings';
 import Wishlist from './pages/Wishlist';
 import NotFound from './pages/NotFound';
 import ProfileCard from './components/user/ProfileCard';
+import NewListing from './components/host/NewListing';
+import EditHostListing from './components/host/EditHostListing';
 
 function App() {
   return (
@@ -33,6 +35,8 @@ function App() {
                   <Route path="/register" element={<Register />} />
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/host/dashboard" element={<HostDashboard />} />
+                  <Route path='/host/new-listing' element={<NewListing/>}/>
+                  <Route path='/host/edit-listing/:id' element={<EditHostListing/>}/>
                   <Route path="/bookings" element={<Bookings />} />
                   <Route path="/wishlist" element={<Wishlist />} />
                   <Route path='/profile' element={<ProfileCard/>}/>

@@ -25,20 +25,29 @@ const SearchBar = ({ compact = false }) => {
 
   if (compact) {
     return (
-      <div className="search-bar-compact shadow-sm rounded-pill border p-2 bg-white">
-        <div className="d-flex align-items-center">
-          <input 
-            type="text"
-            className="form-control border-0 fw-semibold"
-            placeholder="Start your search"
-            // onClick={() => navigate('/search')}
-            // readOnly
-          />
-          <button className="btn btn-danger rounded-circle " onClick={() => navigate('/search')}>
-            <i className="bi bi-search text-white"></i>
-          </button>
-        </div>
-      </div>
+      // <div className="search-bar-compact shadow-sm rounded-pill border p-2 bg-white">
+      //   <div className="d-flex align-items-center">
+      //     <input 
+      //       type="text"
+      //       className="form-control border-0 fw-semibold"
+      //       placeholder="Enter your destination"
+      //       value={location}
+      //       onChange={(e) => setLocation(e.target.value)}
+      //       onKeyPress={(e) => {
+      //         if (e.key === 'Enter') {
+      //           handleSearch();
+      //         }
+      //       }}
+      //     />
+      //     <button 
+      //       className="btn btn-danger rounded-circle" 
+      //       onClick={handleSearch}
+      //     >
+      //       <i className="bi bi-search text-white"></i>
+      //     </button>
+      //   </div>
+      // </div>
+      null
     );
   }
 

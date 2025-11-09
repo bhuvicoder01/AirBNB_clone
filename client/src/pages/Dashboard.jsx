@@ -5,9 +5,9 @@ import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
   const { user } = useAuth();
-  const { getUserBookings } = useBooking();
+  const { getUserBookings ,bookings} = useBooking();
   
-  const userBookings = user ? getUserBookings(user.id) : [];
+  const userBookings = user ? bookings : [];
   const upcomingBookings = userBookings.filter(b => b.status === 'confirmed');
   const pastBookings = userBookings.filter(b => b.status === 'completed');
 
@@ -21,14 +21,14 @@ const Dashboard = () => {
         {upcomingBookings.length > 0 ? (
           <div className="row g-4">
             {upcomingBookings.map((booking) => (
-              <div key={booking.id} className="col-md-6">
+              <div key={booking._id} className="col-md-6">
                 <div className="card">
                   <div className="card-body">
                     <h5>{booking.propertyTitle}</h5>
                     <p className="text-muted">
-                      {booking.checkIn} - {booking.checkOut}
+                      {new Date(booking.checkIn).toLocaleDateString()} - {new Date(booking.checkOut).toLocaleDateString()}
                     </p>
-                    <Link to={`/booking/${booking.id}`} className="btn btn-outline-dark">
+                    <Link to={`/booking/${booking._id}`} className="btn btn-outline-dark">
                       View Details
                     </Link>
                   </div>
@@ -50,7 +50,7 @@ const Dashboard = () => {
         {pastBookings.length > 0 ? (
           <div className="row g-4">
             {pastBookings.map((booking) => (
-              <div key={booking.id} className="col-md-6">
+              <div key={booking._id} className="col-md-6">
                 <div className="card">
                   <div className="card-body">
                     <h5>{booking.propertyTitle}</h5>

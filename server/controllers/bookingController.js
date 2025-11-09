@@ -16,7 +16,7 @@ class bookingController {
     static getUserBookings=async (req,res) => {
         const userId=req.params.id;
         const userBookings=await bookingModel.find({userId:userId}).sort('checkIn')
-        console.log(userBookings)
+        // console.log(userBookings)
         return res.json({bookings:userBookings});
 
     }
