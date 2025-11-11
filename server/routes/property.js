@@ -41,7 +41,7 @@ router.get('/:id', propertyController.getById);
 router.post('/create', upload.array('images', 10), propertyController.create);
 router.get('/host/properties', propertyController.getHostProperties);
 router.get('/host/:hostId/properties', propertyController.getHostProperties);
-router.put('/:id', propertyController.updateProperty);
+router.put('/:id', upload.array('images',10),propertyController.updateProperty);
 router.patch('/:id/toggle-status', propertyController.togglePropertyStatus);
 router.delete('/:id', propertyController.deleteProperty);
 

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DateRangePicker from './DateRangePicker';
 import GuestCounter from './GuestCounter';
+import '../../styles/index.css';
 
 const SearchBar = ({ compact = false }) => {
   const navigate = useNavigate();
@@ -52,7 +53,7 @@ const SearchBar = ({ compact = false }) => {
   }
 
   return (
-    <div className="search-bar shadow-lg border bg-white p-2" style={{borderRadius:'50px'}}>
+    <div className="search-bar shadow-lg border  p-2" style={{borderRadius:'50px'}}>
       <div className="row g-0">
         {/* Location */}
         <div className="col-md-4 position-relative">
@@ -79,7 +80,7 @@ const SearchBar = ({ compact = false }) => {
             </div>
           </div>
           {showDatePicker && (
-            <div className="position-absolute top-100 mt-2 bg-white shadow-lg rounded p-3 z-3">
+            <div className="date-range-picker position-absolute top-100 mt-2 bg-white shadow-lg rounded p-3 z-3"style={{left:'-100%'}}>
               <DateRangePicker value={dates} onChange={setDates} />
             </div>
           )}

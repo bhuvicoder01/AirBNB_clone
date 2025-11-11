@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { format, addMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay } from 'date-fns';
+import '../../styles/index.css';
 
 const DateRangePicker = ({ value, onChange }) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -56,7 +57,7 @@ const DateRangePicker = ({ value, onChange }) => {
   };
 
   return (
-    <div className="date-range-picker">
+    <div className="date-range-picker" >
       <div className="d-flex gap-4">
         {renderCalendar(currentMonth)}
         {renderCalendar(addMonths(currentMonth, 1))}

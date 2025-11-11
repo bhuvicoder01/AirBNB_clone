@@ -12,7 +12,7 @@ const Home = () => {
     { name: "Cabins", icon: "bi-house-door" },
     { name: "Trending", icon: "bi-fire" },
     { name: "Pools", icon: "bi-droplet" },
-    { name: "Mountains", icon: "fas fa-mountain" },
+    { name: "Mountains", icon: "fas fa-mountain-city" },
     { name: "Unique stays", icon: "bi-star" },
   ];
 

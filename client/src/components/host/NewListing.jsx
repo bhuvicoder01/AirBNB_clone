@@ -35,7 +35,7 @@ const NewListing = () => {
     amenities: [],
     host: {
         id:user?._id||'',
-      name: user?.name || '',
+      name: (user?.firstName+''+user?.lastName) || '',
       avatar: user?.avatar?.url || '',
       superhost: false,
       response_time: '1 hour'
@@ -74,11 +74,26 @@ const NewListing = () => {
 
   const handleAmenitiesChange = (amenity) => {
     setFormData(prev => {
-      const amenities = prev.amenities.includes(amenity)
-        ? prev.amenities.filter(a => a !== amenity)
-        : [...prev.amenities, amenity];
-      return { ...prev, amenities };
+      // Create a new Set from current amenities for efficient lookup
+      const currentAmenities = new Set(prev.amenities);
+      
+      // If amenity exists, remove it; otherwise add it
+      if (currentAmenities.has(amenity)) {
+        currentAmenities.delete(amenity);
+      } else {
+        currentAmenities.add(amenity);
+      }
+      
+      // Convert Set back to Array and sort for consistent order
+      const updatedAmenities = Array.from(currentAmenities).sort();
+      
+      return {
+        ...prev,
+        amenities: updatedAmenities
+      };
+      
     });
+    console.log(formData)
   };
 
   const handleImageChange = (e) => {

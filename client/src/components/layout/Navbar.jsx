@@ -10,7 +10,7 @@ const Navbar = () => {
   const [showSearchBar, setShowSearchBar] = useState(false);
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top">
+    <nav className="navbar navbar-expand-lg navbar-light border-bottom sticky-top">
       <div className="container-fluid px-4">
         {/* Logo */}
         <Link to="/" className="navbar-brand d-flex align-items-center">

@@ -46,8 +46,8 @@ const ProfileCard = ({}) => {
 
   return (
     <>
-      <div className="card">
-        <div className="card-body text-center">
+      <div className="card mt-2"style={{minWidth:'80%',paddingInline:'10%',marginInline:'5%'}}>
+        <div className="card-body text-center"style={{justifyContent:'center'}}>
           <img
             src={user?.avatar?.url}
             alt={user?.firstName}
@@ -84,7 +84,7 @@ const ProfileCard = ({}) => {
           )}
 
           {showEdit && (
-            <button className="btn btn-outline-dark w-100" onClick={onEdit}>
+            <button className="btn btn-outline-dark "style={{minWidth:'50%'}} onClick={onEdit}>
               <i className="bi bi-pencil me-2"></i>
               Edit Profile
             </button>
@@ -92,7 +92,7 @@ const ProfileCard = ({}) => {
 
           <div className="mt-4 pt-4 border-top">
             <div className="d-flex justify-content-between mb-2">
-              <span className="text-muted">Member since</span>
+              <span>😎 <span className="text-muted">Member since</span></span>
               <span className="fw-semibold">{new Date((user?.createdAt)).toLocaleDateString()}</span>
             </div>
             {user?.role==="host" && <div className="d-flex justify-content-between">

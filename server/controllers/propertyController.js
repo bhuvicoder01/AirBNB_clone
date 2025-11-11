@@ -210,7 +210,8 @@ class propertyController {
                 message: "Property updated successfully"
             });
         } catch (error) {
-            return res.status(500).json({ error: 'Failed to update property' });
+            console.error(error)
+            return res.status(500).json({ message: 'Failed to update property',error:error });
         }
     }
 
