@@ -8,8 +8,8 @@ const Dashboard = () => {
   const { getUserBookings ,bookings} = useBooking();
   
   const userBookings = user ? bookings : [];
-  const upcomingBookings = userBookings.filter(b => b.status === 'confirmed');
-  const pastBookings = userBookings.filter(b => b.status === 'completed');
+  const upcomingBookings = userBookings.filter(b => b.status === 'confirmed'&& new Date(b.checkIn) > new Date());
+  const pastBookings = userBookings.filter(b => b.status === 'completed' && new Date(b.checkOut) < new Date());
 
   return (
     <div className="container mt-4">

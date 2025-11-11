@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { mockProperties } from '../data/mockData';
 import { propertyAPI } from '../services/api';
 
@@ -19,51 +19,55 @@ export const PropertyProvider = ({ children }) => {
     location: '',
     checkIn: null,
     checkOut: null,
-    guests: 1,
+    adults: 1,
+    children: 0,
+    infants: 0,
     priceRange: [0, 1000],
     propertyTypes: [],
     amenities: []
   });
 
-  const getProperties=async () => {
-      const propertiesServer=await propertyAPI.getAll()
-      // console.log("serverproperties")
-      setProperties(propertiesServer.data)
-      localStorage.setItem('properties',JSON.stringify(propertiesServer.data))
-      return propertiesServer
-      console.log(propertiesServer.data)
-    }
+  const getProperties = async () => {
+    const propertiesServer = await propertyAPI.getAll();
+    // console.log("serverproperties"); // Moved before return for visibility
+    setProperties(propertiesServer.data);
+    localStorage.setItem('properties', JSON.stringify(propertiesServer.data));
+    setLoading(false); // Ensure loading is cleared after fetch
+    return propertiesServer;
+  };
 
   useEffect(() => {
-   
-    setTimeout(() => {
-      try{ 
-        const storedProperties=JSON.parse(localStorage.getItem('properties'))
-      if(storedProperties){
-        // console.log("storeed")
-        setProperties(storedProperties);
+    const initializeProperties = async () => {
+      try {
+        const storedProperties = JSON.parse(localStorage.getItem('properties'));
+        if (storedProperties && storedProperties.length > 0) {
+          setProperties(storedProperties);
+          setLoading(false);
+          return; // Skip API if stored data exists and is valid
+        }
+      } catch (error) {
+        console.error('Error loading stored properties:', error);
+        setProperties(mockProperties);
         setLoading(false);
       }
-    }
-      catch(error){
-        setProperties(mockProperties)
-      }
-      getProperties()      
-    }, 500);
-    
+
+      // Fetch from API if no valid stored data
+      await getProperties();
+    };
+
+    // Removed arbitrary setTimeout – now async for better UX (loading stays true during fetch)
+    initializeProperties();
   }, []);
 
-  const searchProperties = (searchFilters) => {
-    setFilters({ ...filters, ...searchFilters });
-    
-    // TODO: Replace with actual API call
-    // Mock filtering logic
+  // Pure filtering function – no side effects (removed setFilters)
+  // Now memoized with useCallback for stability
+  const searchProperties = useCallback((searchFilters) => {
     let filtered = properties;
 
     if (searchFilters.location) {
       filtered = filtered.filter(p => 
-        p.location.city.toLowerCase().includes(searchFilters.location.toLowerCase()) ||
-        p.location.country.toLowerCase().includes(searchFilters.location.toLowerCase())
+        p.location?.city?.toLowerCase().includes(searchFilters.location.toLowerCase()) ||
+        p.location?.country?.toLowerCase().includes(searchFilters.location.toLowerCase())
       );
     }
 
@@ -82,17 +86,25 @@ export const PropertyProvider = ({ children }) => {
 
     if (searchFilters.amenities && searchFilters.amenities.length > 0) {
       filtered = filtered.filter(p => 
-        searchFilters.amenities.every(amenity => p.amenities.includes(amenity))
+        searchFilters.amenities.every(amenity => p.amenities?.includes(amenity))
       );
     }
 
-    return filtered;
-  };
+    // TODO: Add filtering for dates (e.g., availability check) and guests
+    // Example for guests (total = adults + children + infants):
+    // if (searchFilters.adults !== undefined && searchFilters.children !== undefined && searchFilters.infants !== undefined) {
+    //   const totalGuests = searchFilters.adults + searchFilters.children + searchFilters.infants;
+    //   filtered = filtered.filter(p => p.max_guests >= totalGuests);
+    // }
+    // For dates: assume p.availability is an array of booked dates; check overlap, etc.
 
-  const getPropertyById =async (id) => {
-    console.log(id)
-    const property=( await propertyAPI.getById(id)).data
-    console.log(property.data)
+    return filtered;
+  }, [properties]); // Only depends on properties (stable after load)
+
+  const getPropertyById = async (id) => {
+    // console.log(id);
+    const property = (await propertyAPI.getById(id)).data;
+    // console.log(property); // Fixed: log the property object, not .data (assuming it's already extracted)
     return property;
   };
 
@@ -100,6 +112,7 @@ export const PropertyProvider = ({ children }) => {
     properties,
     loading,
     filters,
+    setFilters, // Expose setter for components to update filters explicitly
     searchProperties,
     getPropertyById
   };

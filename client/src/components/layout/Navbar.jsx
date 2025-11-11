@@ -10,8 +10,8 @@ const Navbar = () => {
   const [showSearchBar, setShowSearchBar] = useState(false);
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light border-bottom sticky-top">
-      <div className="container-fluid px-4">
+    <nav className="navbar navbar-expand-lg navbar-light  sticky-top"style={{backgroundColor:'transparent'}}>
+      <div className="container-fluid  py-2 px-2 "style={{backgroundColor:'rgba(255, 255, 255, 0.82)',borderRadius:'20px',marginInline:'4%'}}>
         {/* Logo */}
         <Link to="/" className="navbar-brand d-flex align-items-center">
           <i className="bi bi-house-heart-fill text-danger fs-3 me-2"></i>
@@ -32,7 +32,13 @@ const Navbar = () => {
           >
             Become a Host
           </Link>
-
+{/* Mobile Search Button */}
+        <button 
+          className="btn btn-link d-md-none"
+          onClick={() => setShowSearchBar(!showSearchBar)}
+        >
+          <i className="bi bi-search"></i>
+        </button>
           {/* Globe Icon */}
           <button className="btn btn-link text-dark p-2">
             <i className="bi bi-globe fs-5"></i>
@@ -42,18 +48,12 @@ const Navbar = () => {
           <UserMenu />
         </div>
 
-        {/* Mobile Search Button */}
-        <button 
-          className="btn btn-link d-md-none"
-          onClick={() => setShowSearchBar(!showSearchBar)}
-        >
-          <i className="bi bi-search"></i>
-        </button>
+        
       </div>
 
       {/* Mobile Search Bar */}
       {showSearchBar && (
-        <div className="d-md-none p-3 border-top">
+        <div className="d-md-none p-3 "style={{backgroundColor:'transparent'}}>
           <SearchBar />
         </div>
       )}

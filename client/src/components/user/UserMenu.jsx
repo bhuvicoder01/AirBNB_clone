@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import '../../styles/index.css'
 
 const UserMenu = () => {
   const { user, isAuthenticated, logout } = useAuth();
@@ -28,7 +29,7 @@ const UserMenu = () => {
   return (
     <div className="user-menu position-relative" ref={menuRef}>
       <button
-        className="btn btn-outline-secondary rounded-pill px-3 py-2 d-flex align-items-center gap-2"
+        className="btn user-menu-btn rounded-pill px-3 py-2 d-flex align-items-center gap-2"style={{borderColor:'red'}}
         onClick={() => setShowMenu(!showMenu)}
       >
         <i className="bi bi-list fs-5"></i>
@@ -46,7 +47,7 @@ const UserMenu = () => {
 
       {showMenu && (
         <div 
-          className="position-absolute end-0 mt-2 bg-white rounded shadow-lg border"
+          className="position-absolute user-menu-modal end-0 mt-2 bg-white  shadow-lg border"
           style={{ minWidth: '240px', zIndex: 1000 }}
         >
           {isAuthenticated ? (

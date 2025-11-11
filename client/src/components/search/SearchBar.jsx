@@ -53,11 +53,11 @@ const SearchBar = ({ compact = false }) => {
   }
 
   return (
-    <div className="search-bar shadow-lg border  p-2" style={{borderRadius:'50px'}}>
+    <div className="search-bar shadow-lg border  p-2" style={{backgroundColor:'white',borderRadius:'50px',opacity:'1'}}>
       <div className="row g-0">
         {/* Location */}
         <div className="col-md-4 position-relative">
-          <div className="p-3 border-end">
+          <div className="p-3 ">
             <label className="small fw-semibold">Where</label>
             <input 
               type="text"
@@ -71,7 +71,7 @@ const SearchBar = ({ compact = false }) => {
 
         {/* Dates */}
         <div className="col-md-4 position-relative">
-          <div className="p-3 border-end" onClick={() => setShowDatePicker(!showDatePicker)}>
+          <div className="p-3 " onClick={() => setShowDatePicker(!showDatePicker)}>
             <label className="small fw-semibold">Check in / Check out</label>
             <div className="text-muted small">
               {dates.checkIn && dates.checkOut 

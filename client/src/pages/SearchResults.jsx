@@ -6,7 +6,7 @@ import FilterPanel from '../components/search/FilterPanel';
 
 const SearchResults = () => {
   const [searchParams] = useSearchParams();
-  const { searchProperties } = useProperty();
+  const { searchProperties,setFilters } = useProperty();
   const [filteredProperties, setFilteredProperties] = useState([]);
   const [showFilters, setShowFilters] = useState(false);
 
@@ -19,6 +19,7 @@ const SearchResults = () => {
       children: parseInt(searchParams.get('children')) || 0,
       infants: parseInt(searchParams.get('infants')) || 0
     };
+    setFilters(filters)
 
     // Handle search from compact search bar (location only)
     if (!filters.checkIn && !filters.checkOut) {
@@ -37,9 +38,10 @@ const SearchResults = () => {
       const results = searchProperties(filters);
       setFilteredProperties(results);
     }
-  }, [searchParams, searchProperties]);
+  }, [searchParams, searchProperties,setFilters]);
 
   const handleFilterChange = (newFilters) => {
+    setFilters(newFilters); // Update context filters
     const results = searchProperties(newFilters);
     setFilteredProperties(results);
   };

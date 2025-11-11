@@ -39,7 +39,7 @@ const Home = () => {
       ) : null}
 
       {/* Categories */}
-      <div className="container mt-4">
+      <div className="container mt-3">
         <div className="d-flex gap-4 overflow-auto pb-3">
           {categories.map((category) => (
             <Link

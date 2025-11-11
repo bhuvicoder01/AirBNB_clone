@@ -27,6 +27,9 @@ const HostDashboard = () => {
 
   // Fetch host properties and bookings
   useEffect(() => {
+    if(user?.role!=='host'){
+      navigate('/')
+    }
     const fetchHostData = async () => {
       try {
         setLoading(true);
@@ -144,7 +147,7 @@ const HostDashboard = () => {
       <div className="row mb-4">
         <div className="col-md-8">
           <h2>Host Dashboard</h2>
-          <p className="text-muted">Welcome back, {user?.firstName} Sir!🤠</p>
+          <p><span className="text-muted">Welcome back, {user?.firstName} Sir!</span>🤠</p>
         </div>
         <div className="col-md-4 text-md-end">
           <Link to="/host/new-listing">
@@ -213,7 +216,7 @@ const HostDashboard = () => {
                 <div className="d-flex justify-content-between align-items-center">
                   <div>
                     <p className="text-muted mb-1 small">Active Bookings</p>
-                    <h3 className="mb-0">{bookings.filter(b=>b.status=="confirmed"&& b.isActive==true).length}</h3>
+                    <h3 className="mb-0">{bookings.filter(b=>b.status=="confirmed").length}</h3>
                   </div>
                   <i className="bi bi-calendar-check fs-2 text-success"></i>
                 </div>
@@ -295,7 +298,7 @@ const HostDashboard = () => {
                               </Button>
                             </>
                           )}
-                          {booking.status === 'confirmed' && (
+                          {booking.status === 'confirmed'&& new Date(booking.checkIn) > new Date() && (
                             <Button 
                               size="sm" 
                               variant="danger"
@@ -430,7 +433,7 @@ const HostDashboard = () => {
                             </Button>
                           </>
                         )}
-                        {booking.status === 'confirmed' && (
+                        {booking.status === 'confirmed' && new Date(booking.checkIn)>new Date() && (
                           <Button 
                             size="sm" 
                             variant="danger"
