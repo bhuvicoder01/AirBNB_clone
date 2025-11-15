@@ -2,6 +2,7 @@ const mongoose=require('mongoose')
 
 const bookingSchema=mongoose.Schema({
         propertyId:{type:String,required:true},
+        hostId:{type:String,required:true},
         propertyTitle: String,
         checkIn:Date,
         checkOut:Date,

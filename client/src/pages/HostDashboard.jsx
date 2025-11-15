@@ -18,7 +18,7 @@ const HostDashboard = () => {
   
   // State for host data
   const [hostProperties, setHostProperties] = useState([]);
-  const [bookings, setBookings] = useState([]);
+  const [hostBookings, setHostBookings] = useState([]);
   const [earnings, setEarnings] = useState({
     thisMonth: 0,
     lastMonth: 0,
@@ -39,8 +39,8 @@ const HostDashboard = () => {
         setHostProperties(propertiesResponse.data);
 
         // Fetch bookings for the host's properties
-        const bookingsResponse = await bookingAPI.getUserBookings(user?._id);
-        setBookings(bookingsResponse.data.bookings);
+        const bookingsResponse = await bookingAPI.getAllBookingsForHostProperties(user?._id);
+        setHostBookings(bookingsResponse.data.bookings);
 
         // Calculate earnings
         const calculateEarnings = () => {
@@ -216,7 +216,7 @@ const HostDashboard = () => {
                 <div className="d-flex justify-content-between align-items-center">
                   <div>
                     <p className="text-muted mb-1 small">Active Bookings</p>
-                    <h3 className="mb-0">{bookings.filter(b=>b.status=="confirmed").length}</h3>
+                    <h3 className="mb-0">{hostBookings.filter(b=>b.status=="confirmed").length}</h3>
                   </div>
                   <i className="bi bi-calendar-check fs-2 text-success"></i>
                 </div>
@@ -262,7 +262,7 @@ const HostDashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {bookings.slice(0, 5).map(booking => (
+                  {hostBookings.slice(0, 5).map(booking => (
                     <tr key={booking._id}>
                       <td>{booking.userId}</td>
                       <td>{booking.propertyTitle}</td>
@@ -311,7 +311,7 @@ const HostDashboard = () => {
                       </td>
                     </tr>
                   ))}
-                  {bookings.length === 0 && (
+                  {hostBookings.length === 0 && (
                     <tr>
                       <td colSpan="7" className="text-center py-4">
                         No bookings found
@@ -397,7 +397,7 @@ const HostDashboard = () => {
                 </tr>
               </thead>
               <tbody>
-                {bookings.map(booking => (
+                {hostBookings.map(booking => (
                   <tr key={booking._id}>
                     <td>{booking.userId}</td>
                     <td>{booking.propertyTitle}</td>
@@ -446,7 +446,7 @@ const HostDashboard = () => {
                     </td>
                   </tr>
                 ))}
-                {bookings.length === 0 && (
+                {hostBookings.length === 0 && (
                   <tr>
                     <td colSpan="7" className="text-center py-4">
                       No bookings found
@@ -507,7 +507,7 @@ const HostDashboard = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {bookings
+                    {hostBookings
                       .filter(booking => booking.status === 'confirmed')
                       .slice(0, 10)
                       .map(booking => (

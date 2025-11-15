@@ -43,7 +43,7 @@ export const PropertyProvider = ({ children }) => {
         if (storedProperties && storedProperties.length > 0) {
           setProperties(storedProperties);
           setLoading(false);
-          return; // Skip API if stored data exists and is valid
+         
         }
       } catch (error) {
         console.error('Error loading stored properties:', error);
@@ -90,7 +90,7 @@ export const PropertyProvider = ({ children }) => {
       );
     }
 
-    // TODO: Add filtering for dates (e.g., availability check) and guests
+    // Add filtering for dates (e.g., availability check) and guests
     // Example for guests (total = adults + children + infants):
     // if (searchFilters.adults !== undefined && searchFilters.children !== undefined && searchFilters.infants !== undefined) {
     //   const totalGuests = searchFilters.adults + searchFilters.children + searchFilters.infants;
@@ -104,7 +104,7 @@ export const PropertyProvider = ({ children }) => {
   const getPropertyById = async (id) => {
     // console.log(id);
     const property = (await propertyAPI.getById(id)).data;
-    // console.log(property); // Fixed: log the property object, not .data (assuming it's already extracted)
+    // console.log(property);
     return property;
   };
 
@@ -112,7 +112,7 @@ export const PropertyProvider = ({ children }) => {
     properties,
     loading,
     filters,
-    setFilters, // Expose setter for components to update filters explicitly
+    setFilters,
     searchProperties,
     getPropertyById
   };

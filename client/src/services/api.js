@@ -81,7 +81,10 @@ export const bookingAPI = {
   getById: (id) => api.get(`/bookings/${id}`),
   getUserBookings: (userId) => api.get(`/bookings/user/${userId}`),
   cancel: (id) => api.put(`/bookings/${id}/cancel`),
-  confirm: (id) => api.put(`/bookings/${id}/confirm`)
+  confirm: (id) => api.put(`/bookings/${id}/confirm`),
+
+  //host endpoints
+  getAllBookingsForHostProperties: (hostId) => api.get(`bookings/host/${hostId}`)
 };
 
 // Reviews

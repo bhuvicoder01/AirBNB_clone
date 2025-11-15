@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useBooking } from '../../contexts/BookingContext';
 import Calendar from './Calendar';
@@ -10,7 +10,7 @@ import { calculateTotalPrice } from '../../utils/priceCalculator';
 const BookingWidget = ({ property }) => {
   const navigate = useNavigate();
   const { user,isAuthenticated } = useAuth();
-  const { createBooking } = useBooking();
+  const { createBooking,setCurrentBooking,currentBooking } = useBooking();
   
   const [checkIn, setCheckIn] = useState(null);
   const [checkOut, setCheckOut] = useState(null);
@@ -33,8 +33,21 @@ const BookingWidget = ({ property }) => {
     }
 
     try {
+      setCurrentBooking({
+        propertyId: property._id,
+        hostId:property?.hostId||property?.host?.id,
+        propertyTitle: property.title,
+        pricePerNight:property.price_per_night,
+        checkIn,
+        checkOut,
+        guests,
+        totalPrice: pricing.total,
+        userId: user._id // TODO: Get from auth context
+      })
+      return navigate('/payment')
       await createBooking({
         propertyId: property._id,
+        hostId:property?.hostId||property?.host?.id,
         propertyTitle: property.title,
         checkIn,
         checkOut,

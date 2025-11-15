@@ -2,6 +2,7 @@ import React from 'react';
 
 const Button = ({ 
   children, 
+  label='label',
   variant = 'primary', 
   size = 'md', 
   fullWidth = false,
@@ -46,7 +47,7 @@ const Button = ({
           Loading...
         </>
       ) : (
-        children
+       children?children:label
       )}
     </button>
   );

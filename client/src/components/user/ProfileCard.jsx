@@ -14,7 +14,7 @@ const ProfileCard = ({}) => {
 
   useEffect(() => {
     if (user) {
-      setForm({ firstName: user.firstName||'', lastName: user.lastName || '', email: user.email || '', avatar: user.avatar || '' });
+      setForm({ firstName: user?.firstName||'', lastName: user?.lastName || '', email: user?.email || '', avatar: user?.avatar?.url || '' });
     }
   }, [user]);
 
@@ -40,7 +40,7 @@ const ProfileCard = ({}) => {
     }
 
     // update auth context (this also persists to localStorage in AuthContext)
-    updateProfile({ firstName: form.firstName.trim() ,lastName: form.lastName.trim(), email: form.email.trim(), avatar: form.avatar.url.trim() });
+    updateProfile({ firstName: form.firstName.trim() ,lastName: form.lastName.trim(), email: form.email.trim(), avatar: form.avatar.trim() });
     setShowModal(false);
   };
 
@@ -160,7 +160,7 @@ const ProfileCard = ({}) => {
             type="text"
             className="form-control"
             name="avatar"
-            value={form.avatar.url}
+            value={form.avatar}
             onChange={handleChange}
           />
         </div>

@@ -56,10 +56,10 @@ export const AuthProvider = ({ children }) => {
    try{ 
     const response=await authAPI.register(userData)
     if(response.data){
-    const newUser=response.data.user
+    const newUser=response.data
     setUser(newUser);
     setIsAuthenticated(true);
-    localStorage.setItem('user', JSON.stringify(newUser));
+    localStorage.setItem('user', JSON.stringify(newUser)||'');
     return newUser;
     }
     else{

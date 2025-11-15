@@ -1,4 +1,5 @@
 const bookingModel = require("../models/Booking");
+const propertyModel = require("../models/Property");
 
 class bookingController {
     static getAll = async (req, res) => {
@@ -30,6 +31,8 @@ class bookingController {
       try{  const body=req.body;
         console.log(`creating booking with:${body}`)
 
+        
+
         const booking=await bookingModel.create(body);
 
         return res.json({booking:booking,message:"success"});
@@ -46,6 +49,18 @@ class bookingController {
         return res.json({
             message:result
         })
+    }
+
+    static getAllBookingsForHostProperties=async (req,res) => {
+        const id=req.params.id
+        console.log(id)
+
+        const bookings=await bookingModel.find({hostId:id})
+        
+        console.log(bookings)
+
+        res.json({bookings:bookings,message:'success'})
+        
     }
 }
 

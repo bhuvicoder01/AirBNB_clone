@@ -1,13 +1,14 @@
 import React from 'react';
+import { Outlet } from 'react-router-dom';
 import Navbar from './Navbar';
 import Footer from './Footer';
 
-const Layout = ({ children }) => {
+const Layout = () => {
   return (
     <div className="d-flex flex-column">
       <Navbar />
       <main className="flex-grow-1">
-        {children}
+        <Outlet />
       </main>
       <Footer />
     </div>

@@ -26,12 +26,17 @@ const Navbar = () => {
         {/* Right Side Menu */}
         <div className="d-flex align-items-center gap-3">
           {/* Become a Host */}
-          <Link 
-            to="/host/dashboard" 
+          {user?.role!=='host' ? (<Link 
+            to="/apply/host" 
             className="text-decoration-none text-dark fw-semibold d-none d-lg-block host-link"
           >
             Become a Host
-          </Link>
+          </Link>):(<Link 
+            to="/host/dashboard" 
+            className="text-decoration-none text-dark fw-bold d-none d-lg-block host-link"
+          >
+            Dashboard
+          </Link>)}
 {/* Mobile Search Button */}
         <button 
           className="btn btn-link d-md-none"
