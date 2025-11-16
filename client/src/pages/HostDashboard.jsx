@@ -521,7 +521,7 @@ const HostDashboard = () => {
                           <td>₹{booking.totalPrice}</td>
                         </tr>
                       ))}
-                    {bookings.filter(booking => booking.status === 'confirmed').length === 0 && (
+                    {hostBookings.filter(booking => booking.status === 'confirmed').length === 0 && (
                       <tr>
                         <td colSpan="5" className="text-center py-4">
                           No transactions found
