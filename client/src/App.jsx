@@ -5,6 +5,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import { PropertyProvider } from './contexts/PropertyContext';
 import { BookingProvider } from './contexts/BookingContext';
 import { WishlistProvider } from './contexts/WishlistContext';
+import { LanguageProvider } from './contexts/LanguageContext';
 import Layout from './components/layout/Layout';
 import Home from './pages/Home';
 import SearchResults from './pages/SearchResults';
@@ -25,11 +26,12 @@ import PaymentPage from './pages/Payment';
 function App() {
   return (
     <Router>
-      <PaymentProvider>
-      <AuthProvider>
-        <PropertyProvider>
-          <BookingProvider>
-            <WishlistProvider>
+      <LanguageProvider>
+        <PaymentProvider>
+          <AuthProvider>
+            <PropertyProvider>
+              <BookingProvider>
+                <WishlistProvider>
               <Routes>
                 {/* Isolated Payment Route - No Layout */}
                 <Route path='/payment' element={<PaymentPage/>}/>
@@ -52,11 +54,12 @@ function App() {
                   <Route path="*" element={<NotFound />} />
                 </Route>
               </Routes>
-            </WishlistProvider>
-          </BookingProvider>
-        </PropertyProvider>
-      </AuthProvider>
-      </PaymentProvider>
+                </WishlistProvider>
+              </BookingProvider>
+            </PropertyProvider>
+          </AuthProvider>
+        </PaymentProvider>
+      </LanguageProvider>
     </Router>
   );
 }

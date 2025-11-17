@@ -7,6 +7,7 @@ import Button from '../components/common/Button';
 import Loading from '../components/common/Loading';
 import Toast from '../components/common/Toast';
 import { propertyAPI, bookingAPI } from '../services/api';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const HostDashboard = () => {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ const HostDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showToast, setShowToast] = useState(false);
+  const {t}=useLanguage()
   
   // State for host data
   const [hostProperties, setHostProperties] = useState([]);
@@ -147,7 +149,7 @@ const HostDashboard = () => {
       )}
       <div className="row mb-4">
         <div className="col-md-8">
-          <h2>Host Dashboard</h2>
+          <h2>{t('host')} {t('dashboard')}</h2>
           <p><span className="text-muted">Welcome back, {user?.firstName} Sir!</span>🤠</p>
         </div>
         <div className="col-md-4 text-md-end">

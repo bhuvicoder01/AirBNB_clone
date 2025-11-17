@@ -21,7 +21,7 @@ const Footer = () => {
           <div className="col-md-3 mb-4">
             <h6 className="fw-bold mb-3">Community</h6>
             <ul className="list-unstyled">
-              <li className="mb-2"><Link to="/impact" className="text-muted text-decoration-none">Airbnb.org</Link></li>
+              <li className="mb-2"><Link to="/impact" className="text-muted text-decoration-none">Wandora.org</Link></li>
               <li className="mb-2"><Link to="/refugees" className="text-muted text-decoration-none">Support refugees</Link></li>
               <li className="mb-2"><Link to="/combat" className="text-muted text-decoration-none">Combat discrimination</Link></li>
             </ul>
@@ -32,15 +32,15 @@ const Footer = () => {
             <h6 className="fw-bold mb-3">Hosting</h6>
             <ul className="list-unstyled">
               <li className="mb-2"><Link to="/host" className="text-muted text-decoration-none">Try hosting</Link></li>
-              <li className="mb-2"><Link to="/aircover" className="text-muted text-decoration-none">AirCover for Hosts</Link></li>
+              <li className="mb-2"><Link to="/aircover" className="text-muted text-decoration-none">WandoraCover for Hosts</Link></li>
               <li className="mb-2"><Link to="/resources" className="text-muted text-decoration-none">Hosting resources</Link></li>
               <li className="mb-2"><Link to="/community-forum" className="text-muted text-decoration-none">Community forum</Link></li>
             </ul>
           </div>
 
-          {/* Airbnb */}
+          {/* Wandora */}
           <div className="col-md-3 mb-4">
-            <h6 className="fw-bold mb-3">Airbnb</h6>
+            <h6 className="fw-bold mb-3">Wandora</h6>
             <ul className="list-unstyled">
               <li className="mb-2"><Link to="/newsroom" className="text-muted text-decoration-none">Newsroom</Link></li>
               <li className="mb-2"><Link to="/features" className="text-muted text-decoration-none">New features</Link></li>
@@ -56,7 +56,7 @@ const Footer = () => {
         <div className="row">
           <div className="col-md-6 mb-3 mb-md-0">
             <div className="d-flex flex-wrap gap-3 small text-muted">
-              <span>© 2025 Airbnb, Inc.</span>
+              <span>© 2025 Wandora, Inc.</span>
               <Link to="/terms" className="text-muted text-decoration-none">Terms</Link>
               <Link to="/sitemap" className="text-muted text-decoration-none">Sitemap</Link>
               <Link to="/privacy" className="text-muted text-decoration-none">Privacy</Link>

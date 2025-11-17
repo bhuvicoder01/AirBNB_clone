@@ -16,7 +16,8 @@ const bookingSchema=mongoose.Schema({
             }
             ,amount:Number
             ,currency:String,
-            transactionId:String
+            transactionId:String,
+            date:String
         },
         status:{type:String,
             enum:['confirmed','pending','cancelled','completed','expired'],

@@ -1,21 +1,24 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import { useLanguage } from '../../contexts/LanguageContext';
 import SearchBar from '../search/SearchBar';
 import UserMenu from '../user/UserMenu';
+import LanguageSelector from '../common/LanguageSelector';
 
 const Navbar = () => {
   const { user, isAuthenticated } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [showSearchBar, setShowSearchBar] = useState(false);
 
-  return (
+  return (<>
     <nav className="navbar navbar-expand-lg navbar-light  sticky-top"style={{backgroundColor:'transparent'}}>
       <div className="container-fluid  py-2 px-2 "style={{backgroundColor:'rgba(255, 255, 255, 0.82)',borderRadius:'20px',marginInline:'4%'}}>
         {/* Logo */}
         <Link to="/" className="navbar-brand d-flex align-items-center">
           <i className="bi bi-house-heart-fill text-danger fs-3 me-2"></i>
-          <span className="fw-bold airbnb-logo">AirBnB</span>
+          <span className="fw-bold airbnb-logo">Wandora</span>
         </Link>
 
         {/* Search Bar - Desktop */}
@@ -44,10 +47,8 @@ const Navbar = () => {
         >
           <i className="bi bi-search"></i>
         </button>
-          {/* Globe Icon */}
-          <button className="btn btn-link text-dark p-2">
-            <i className="bi bi-globe fs-5"></i>
-          </button>
+          {/* Language Selector */}
+          <LanguageSelector />
 
           {/* User Menu */}
           <UserMenu />
@@ -63,6 +64,7 @@ const Navbar = () => {
         </div>
       )}
     </nav>
+    </>
   );
 };
 

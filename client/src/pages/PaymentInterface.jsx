@@ -3,15 +3,17 @@ import React, { useState, useEffect } from 'react';
 import { usePayment } from '../contexts/PaymentContext';
 import { useBooking } from '../contexts/BookingContext';
 import { useAuth } from '../contexts/AuthContext';
+import { useLanguage } from '../contexts/LanguageContext';
 import Button from '../components/common/Button';
 import Loading from '../components/common/Loading';
 import Toast from '../components/common/Toast';
 import '../styles/PaymentInterface.css';
 
 const PaymentInterface = ({}) => {
-  const { isPaymentLoading, processPayment, paymentStatus, paymentError, paymentData, resetPayment } = usePayment();
+  const { isPaymentLoading, processPayment, paymentStatus,setPaymentStatus, paymentError, paymentData, resetPayment } = usePayment();
   const {setCurrentBooking, currentBooking,getBookingById } = useBooking();
   const { user } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   
   const [formData, setFormData] = useState({
@@ -35,6 +37,14 @@ const PaymentInterface = ({}) => {
         try {
           const bookingData = await getBookingById(id);
           setBooking(bookingData);
+          if(booking?.status==='confirmed'&&booking?.payment?.status==='paid'){
+            setToastMessage('Booking already paid');
+            setToastType('error');
+            setShowToast(true);
+            setPaymentStatus('completed')
+            // setTimeout(() => navigate('/'), 3000);
+
+          }
         } catch (error) {
           setToastMessage('Booking not found');
           setToastType('error');
@@ -196,28 +206,28 @@ console.log('im here')
       <div className="payment-wrapper">
         {/* Order Summary */}
         <div className="payment-summary">
-          <h2>Order Summary</h2>
+          <h2>{t('orderSummary')}</h2>
           {booking ? (
             <div className="summary-details">
               <div className="summary-item">
-                <span>Check-in:</span>
+                <span>{t('checkIn')}:</span>
                 <span>{new Date(booking.checkIn).toLocaleDateString()}</span>
               </div>
               <div className="summary-item">
-                <span>Check-out:</span>
+                <span>{t('checkOut')}:</span>
                 <span>{new Date(booking.checkOut).toLocaleDateString()}</span>
               </div>
               <div className="summary-item">
-                <span>Nights:</span>
+                <span>{t('nights')}:</span>
                 <span>{Math.ceil(((new Date(booking.checkOut).getTime())-(new Date(booking.checkIn).getTime()))/(1000*60*60*24)) || 0}</span>
               </div>
               <div className="summary-item">
-                <span>Price per night:</span>
+                <span>{t('pricePerNight')}:</span>
                 <span>${booking.pricePerNight || 0}</span>
               </div>
               <div className="summary-divider"></div>
               <div className="summary-item total">
-                <span>Total Amount:</span>
+                <span>{t('totalAmount')}:</span>
                 <span>${booking.totalPrice || 0}</span>
               </div>
             </div>
@@ -228,7 +238,7 @@ console.log('im here')
 
         {/* Payment Form */}
         <div className="payment-form-section">
-          <h2>Payment Details</h2>
+          <h2>{t('paymentDetails')}</h2>
           
           {paymentStatus === 'completed' && paymentData && (
             <div className="payment-success">
@@ -244,12 +254,26 @@ console.log('im here')
               />
             </div>
           )}
+          {paymentStatus==='completed'&& booking?.status==='confirmed'&&booking?.payment?.status==='paid'&&
+          <div className="payment-success">
+              <div className="success-icon">✓</div>
+              <h3>Booking already paid!</h3>
+              <p>Transaction ID: <strong>{booking?.payment?.transactionId}</strong></p>
+              <p>Amount: <strong>${booking?.totalPrice}</strong></p>
+              <p>Date: <strong>{new Date(booking?.payment?.createdAt).toLocaleString()}</strong></p>
+              <Button
+                label="Go Back"
+                onClick={()=>navigate('/')}
+                className="btn-primary"
+              />
+            </div>
+          }
 
           {paymentStatus !== 'completed' && (
             <form onSubmit={handleSubmit} className="payment-form">
               {/* Cardholder Name */}
               <div className="form-group">
-                <label htmlFor="cardName">Cardholder Name *</label>
+                <label htmlFor="cardName">{t('cardholderName')} *</label>
                 <input
                   type="text"
                   id="cardName"
@@ -264,7 +288,7 @@ console.log('im here')
 
               {/* Card Number */}
               <div className="form-group">
-                <label htmlFor="cardNumber">Card Number *</label>
+                <label htmlFor="cardNumber">{t('cardNumber')} *</label>
                 <input
                   type="text"
                   id="cardNumber"
@@ -281,7 +305,7 @@ console.log('im here')
               {/* Expiry and CVV */}
               <div className="form-row">
                 <div className="form-group">
-                  <label htmlFor="expiryDate">Expiry Date *</label>
+                  <label htmlFor="expiryDate">{t('expiryDate')} *</label>
                   <input
                     type="text"
                     id="expiryDate"
@@ -312,7 +336,7 @@ console.log('im here')
 
               {/* Email */}
               <div className="form-group">
-                <label htmlFor="email">Email *</label>
+                <label htmlFor="email">{t('email')} *</label>
                 <input
                   type="email"
                   id="email"
@@ -327,7 +351,7 @@ console.log('im here')
 
               {/* Address */}
               <div className="form-group">
-                <label htmlFor="address">Billing Address *</label>
+                <label htmlFor="address">{t('address')} *</label>
                 <textarea
                   id="address"
                   name="address"
@@ -354,7 +378,7 @@ console.log('im here')
                       
                     />
                     <Button
-                      label="Cancel"
+                      label={t('cancel')}
                       type="button"
                       onClick={handleReset}
                       className="btn-secondary"

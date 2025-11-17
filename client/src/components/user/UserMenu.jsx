@@ -59,7 +59,7 @@ const UserMenu = () => {
 
               <div className="py-2">
                 <Link
-                  to="/dashboard"
+                  to="/bookings"
                   className="dropdown-item px-3 py-2 d-block text-decoration-none text-dark"
                   onClick={() => setShowMenu(false)}
                 >
@@ -127,11 +127,11 @@ const UserMenu = () => {
 
               <div className="py-2">
                 <Link
-                  to="/host/register"
+                  to="/register"
                   className="dropdown-item px-3 py-2 d-block text-decoration-none text-dark"
                   onClick={() => setShowMenu(false)}
                 >
-                  Airbnb your home
+                  Wandora your home
                 </Link>
                 <Link
                   to="/help"

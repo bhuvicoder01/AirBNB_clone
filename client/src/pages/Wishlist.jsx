@@ -1,12 +1,14 @@
 import React from 'react';
 import { useWishlist } from '../contexts/WishlistContext';
 import { useProperty } from '../contexts/PropertyContext';
+import { useLanguage } from '../contexts/LanguageContext';
 import PropertyGrid from '../components/property/PropertyGrid';
 import { Link } from 'react-router-dom';
 
 const Wishlist = () => {
   const { wishlist } = useWishlist();
   const { properties } = useProperty();
+  const { t } = useLanguage();
   // console.log(wishlist);
   // console.log(properties);
 
@@ -23,7 +25,7 @@ const Wishlist = () => {
   // console.log(wishlistedProperties);
   return (
     <div className="container mt-4">
-      <h2 className="mb-4">Wishlists</h2>
+      <h2 className="mb-4">{t('wishlist')}</h2>
       
       {wishlistedProperties.length > 0 ? (
         <PropertyGrid properties={wishlistedProperties} />

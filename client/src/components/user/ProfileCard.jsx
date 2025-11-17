@@ -30,6 +30,22 @@ const ProfileCard = ({}) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    //check file type
+    if (file && !file.type.startsWith('image/')) {
+      alert('Please select an image file');
+      return;
+    }
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setForm((prev) => ({ ...prev, avatar: reader.result }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
 
   const handleSave = () => {
     // Basic validation: require name and email
@@ -82,6 +98,7 @@ const ProfileCard = ({}) => {
               Superhost
             </span>
           )}
+          <br/>
 
           {showEdit && (
             <button className="btn btn-outline-dark "style={{minWidth:'50%'}} onClick={onEdit}>
@@ -146,11 +163,14 @@ const ProfileCard = ({}) => {
         <div className="mb-3">
           <label className="form-label">Email</label>
           <input
-            type="email"
+            type='email'
             className="form-control"
             name="email"
             value={form.email}
-            onChange={handleChange}
+            readOnly
+            // onChange={handleChange}
+            //forbidChange
+
           />
         </div>
 
@@ -162,6 +182,16 @@ const ProfileCard = ({}) => {
             name="avatar"
             value={form.avatar}
             onChange={handleChange}
+          />
+        </div>
+        {/*chage avatar using file image base 64 data */}
+        <div className="mb-3">
+          <label className="form-label">Avatar</label>
+          <input
+            type="file"
+            className="form-control"
+            name="avatar"
+            onChange={handleFileChange}
           />
         </div>
       </Modal>

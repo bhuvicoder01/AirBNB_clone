@@ -33,7 +33,7 @@ class TransactionController{
             const transaction=new transactionModel(body)
            
            if(transaction)
-            { await bookingModel.findByIdAndUpdate(bookingId,{status:'confirmed',payment:{status:'paid',amount,currency,transactionId:transaction.transactionId}})
+            { await bookingModel.findByIdAndUpdate(bookingId,{status:'confirmed',payment:{status:'paid',amount,currency,transactionId:transaction.transactionId,date:transaction.createdAt}})
             await transaction.save();
         }
             

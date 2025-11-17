@@ -1,11 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useProperty } from "../contexts/PropertyContext";
+import { useLanguage } from "../contexts/LanguageContext";
 import PropertyGrid from "../components/property/PropertyGrid";
 import SearchBar from "../components/search/SearchBar";
 
 const Home = () => {
   const { properties, loading } = useProperty();
+  const { t } = useLanguage();
 
   const categories = [
     { name: "Beachfront", icon: "bi-water" },
@@ -24,7 +26,7 @@ const Home = () => {
         <div className="bg-light py-5">
           <div className="container">
             <div className="text-center mb-4">
-              <h1 className="display-4 fw-bold mb-3">Find your next stay</h1>
+              <h1 className="display-4 fw-bold mb-3">{t('findNextStay') || 'Find your next stay'}</h1>
               <p className="lead text-muted">
                 Search deals on hotels, homes, and much more...
               </p>
@@ -59,7 +61,7 @@ const Home = () => {
 
       {/* Featured Properties */}
       <div className="container mt-5">
-        <h3 className="mb-4">Featured Properties</h3>
+        <h3 className="mb-4">{t('featuredProperties') || 'Featured Properties'}</h3>
         {loading ? (
           <div className="text-center py-5">
             <div className="spinner-border text-danger" role="status">

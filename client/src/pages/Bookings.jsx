@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useBooking } from '../contexts/BookingContext';
+import { useLanguage } from '../contexts/LanguageContext';
 import { Link } from 'react-router-dom';
 import Card from '../components/common/Card';
 import Button from '../components/common/Button';
@@ -9,8 +10,14 @@ import { useProperty } from '../contexts/PropertyContext';
 
 const Bookings = () => {
   const { user } = useAuth();
+  const { t, language } = useLanguage();
   const{properties}=useProperty();
   const {isLoading, userBookings, cancelBooking } = useBooking();
+  
+  useEffect(() => {
+    console.log('Language changed to:', language);
+    console.log('Translation for myBookings:', t('myBookings'));
+  }, [language, t]);
   
   // console.log(user?._id)
   const bookings = userBookings||[]
@@ -49,16 +56,16 @@ const Bookings = () => {
             </p>
             <p className="text-muted mb-2">
               <i className="bi bi-people me-2"></i>
-              {booking.guests} {booking.guests === 1 ? 'guest' : 'guests'}
+              {booking.guests} {t('guests')}
             </p>
             <p className="fw-bold mb-3">
-              Total: ₹{booking.totalPrice}
+              {t('total')}: ₹{booking.totalPrice}
             </p>
             
             <div className="d-flex gap-2">
               <Link to={`/property/${booking.propertyId}`}>
                 <Button variant="secondary" size="sm">
-                  View Property
+                  {t('view')} Property
                 </Button>
               </Link>
               {booking.status === 'confirmed' && new Date(booking.checkIn) > new Date() && (
@@ -67,7 +74,7 @@ const Bookings = () => {
                   size="sm"
                   onClick={() => handleCancelBooking(booking._id)}
                 >
-                  Cancel Booking
+                  {t('cancel')} Booking
                 </Button>
               )}
               {booking.status === 'completed' && (
@@ -85,7 +92,7 @@ const Bookings = () => {
   return (<>
   {isLoading ? <Loading />:
     <div className="container mt-4">
-      <h2 className="mb-4">My Bookings</h2>
+      <h2 className="mb-4">{t('myBookings')}</h2>
 
       {/* Upcoming Bookings */}
       <div className="mb-5">

@@ -1,11 +1,13 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useLanguage } from '../contexts/LanguageContext';
 import LoginForm from '../components/user/LoginForm';
 
 const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
+  const { t } = useLanguage();
 
   const handleLogin = async (credentials) => {
     try {
@@ -22,7 +24,7 @@ const Login = () => {
         <div className="col-md-5">
           <div className="card shadow-sm border-0">
             <div className="card-body p-5">
-              <h3 className="text-center mb-4">Welcome to Airbnb</h3>
+              <h3 className="text-center mb-4">{t('login')}</h3>
               <LoginForm onSubmit={handleLogin} />
               
               <div className="text-center mt-4">
