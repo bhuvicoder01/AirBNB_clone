@@ -44,20 +44,25 @@ const BookingWidget = ({ property }) => {
         totalPrice: pricing.total,
         userId: user._id // TODO: Get from auth context
       })
-      return navigate('/payment')
-      await createBooking({
+      // return navigate('/payment')
+      const bookingData= await createBooking({
         propertyId: property._id,
         hostId:property?.hostId||property?.host?.id,
         propertyTitle: property.title,
         checkIn,
         checkOut,
+        pricePerNight:property.price_per_night,
         guests,
         totalPrice: pricing.total,
         userId: user._id // TODO: Get from auth context
       });
+      console.log(bookingData)
+      if(bookingData){
+        navigate(`/payment/booking/${bookingData._id}`)
+      }
       
-      navigate('/bookings');
-      window.location.reload()
+      // navigate('/bookings');
+      // window.location.reload()
     } catch (error) {
       console.error('Booking failed:', error);
       alert('Failed to create booking. Please try again.');

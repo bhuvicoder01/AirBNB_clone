@@ -8,11 +8,24 @@ const bookingSchema=mongoose.Schema({
         checkOut:Date,
         guests:Number,
         totalPrice: Number,
-        status:{type:String,
-            enum:['confirmed','pending','cancelled','completed'],
-            default:'confirmed'
+        pricePerNight:Number,
+        payment:{
+            status:{type:String,
+                enum:['pending','paid','failed'],
+                default:'pending'
+            }
+            ,amount:Number
+            ,currency:String,
+            transactionId:String
         },
-        userId: {type:String,required:true}
+        status:{type:String,
+            enum:['confirmed','pending','cancelled','completed','expired'],
+            default:'pending'
+        },
+        userId: {type:String,required:true},
+        isCheckedIn:{type:Boolean,default:false},
+        isCheckedOut:{type:Boolean,default:false}
+
 },{timestamps:true})
 
 const bookingModel=mongoose.model('bookings',bookingSchema);

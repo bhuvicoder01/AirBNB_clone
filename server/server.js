@@ -7,6 +7,7 @@ const authRoutes=require('./routes/auth')
 const userRoutes=require('./routes/user')
 const propertyRoutes=require('./routes/property')
 const bookingRoutes=require('./routes/booking')
+const paymentRoutes=require('./routes/payment')
 const cors=require('cors')
 
 
@@ -31,6 +32,7 @@ app.use('/api/auth',authRoutes)
 app.use('/api/users',userRoutes)
 app.use('/api/properties',propertyRoutes)
 app.use('/api/bookings',bookingRoutes)
+app.use('/api/payments',paymentRoutes)
 
 
 app.use('/api',async (req,res) => {

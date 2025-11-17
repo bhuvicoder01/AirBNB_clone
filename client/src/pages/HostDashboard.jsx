@@ -27,14 +27,15 @@ const HostDashboard = () => {
 
   // Fetch host properties and bookings
   useEffect(() => {
-    if(user?.role!=='host'){
-      navigate('/')
-    }
+   
     const fetchHostData = async () => {
       try {
         setLoading(true);
-        console.log("loading start")
+        // console.log("loading start")
         // Fetch properties owned by the host
+         if(user?.role!=='host'){
+      navigate('/')
+    }
         const propertiesResponse = await propertyAPI.getAll({ hostId: user?._id });
         setHostProperties(propertiesResponse.data);
 
@@ -120,8 +121,8 @@ const HostDashboard = () => {
         await bookingAPI.cancel(bookingId);
       }
       // Refresh bookings
-      const response = await bookingAPI.getUserBookings(user?.id);
-      setBookings(response.data.bookings);
+      const response =await bookingAPI.getAllBookingsForHostProperties(user?._id);
+      setHostBookings(response.data.bookings);
     } catch (err) {
       setError('Failed to update booking status. Please try again.');
       setShowToast(true);
@@ -496,19 +497,19 @@ const HostDashboard = () => {
 
             <Card shadow title="Recent Transactions">
               <div className="table-responsive">
-                <table className="table">
+                <table className="custom-table">
                   <thead>
                     <tr>
                       <th>Date</th>
                       <th>Guest</th>
                       <th>Property</th>
-                      <th>Status</th>
+                      <th>Booking Status</th>
                       <th>Amount</th>
                     </tr>
                   </thead>
                   <tbody>
                     {hostBookings
-                      .filter(booking => booking.status === 'confirmed')
+                      .filter(booking => booking.status === 'confirmed'||booking.status==='cancelled'||booking?.payment?.status==='paid')
                       .slice(0, 10)
                       .map(booking => (
                         <tr key={booking._id}>
@@ -516,7 +517,7 @@ const HostDashboard = () => {
                           <td>{booking.userId}</td>
                           <td>{booking.propertyTitle}</td>
                           <td>
-                            <span className="badge bg-success">Paid</span>
+                            <span className={`badge ${booking.status==='confirmed'?'bg-success':'bg-danger'}`} >{booking.status}</span>
                           </td>
                           <td>₹{booking.totalPrice}</td>
                         </tr>

@@ -109,7 +109,7 @@ export const userAPI = {
 
 // Payments
 export const paymentAPI = {
-  createIntent: (amount) => api.post('/payments/create-intent', { amount }),
+  createIntent: (bookingId,paymentDetails) => api.post(`/payments/booking/${bookingId}`,paymentDetails),
   confirm: (paymentId) => api.post('/payments/confirm', { paymentId })
 };
 

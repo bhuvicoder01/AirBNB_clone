@@ -35,11 +35,21 @@ class bookingController {
 
         const booking=await bookingModel.create(body);
 
-        return res.json({booking:booking,message:"success"});
+        return res.json({booking:booking,message:"booking initiated with id:"+booking._id});
     }catch(error){
         res.json({message:`server error:${error}`})
     }
         
+    }
+
+    static update=async (req, res) => {
+        const id=req.params.id
+        const body=req.body
+        const result=await bookingModel.findByIdAndUpdate(id, body)
+
+        return res.json({
+            message:result
+        })
     }
 
     static cancel=async (req,res) => {

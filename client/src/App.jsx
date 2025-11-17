@@ -20,6 +20,7 @@ import ProfileCard from './components/user/ProfileCard';
 import NewListing from './components/host/NewListing';
 import EditHostListing from './components/host/EditHostListing';
 import PaymentInterface from './pages/PaymentInterface';
+import PaymentPage from './pages/Payment';
 
 function App() {
   return (
@@ -31,7 +32,8 @@ function App() {
             <WishlistProvider>
               <Routes>
                 {/* Isolated Payment Route - No Layout */}
-                <Route path='/payment' element={<PaymentInterface/>}/>
+                <Route path='/payment' element={<PaymentPage/>}/>
+                <Route path='/payment/booking/:id' element={<PaymentInterface/>}/>
                 
                 {/* All other routes with Layout */}
                 <Route element={<Layout />}>

@@ -1,3 +1,4 @@
+import { useNavigate, useParams } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import { usePayment } from '../contexts/PaymentContext';
 import { useBooking } from '../contexts/BookingContext';
@@ -7,10 +8,11 @@ import Loading from '../components/common/Loading';
 import Toast from '../components/common/Toast';
 import '../styles/PaymentInterface.css';
 
-const PaymentInterface = () => {
+const PaymentInterface = ({}) => {
   const { isPaymentLoading, processPayment, paymentStatus, paymentError, paymentData, resetPayment } = usePayment();
-  const { currentBooking } = useBooking();
+  const {setCurrentBooking, currentBooking,getBookingById } = useBooking();
   const { user } = useAuth();
+  const navigate = useNavigate();
   
   const [formData, setFormData] = useState({
     cardName: '',
@@ -24,12 +26,32 @@ const PaymentInterface = () => {
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [toastType, setToastType] = useState('success');
+  const [booking, setBooking] = useState(null);
+  const {id} = useParams();
+
+  useEffect(() => {
+    const fetchBooking = async () => {
+      if (id) {
+        try {
+          const bookingData = await getBookingById(id);
+          setBooking(bookingData);
+        } catch (error) {
+          setToastMessage('Booking not found');
+          setToastType('error');
+          setShowToast(true);
+          setTimeout(() => navigate('/'), 2000);
+        }
+      }
+    };
+    fetchBooking();
+  }, [id, getBookingById, navigate]);
 
   useEffect(() => {
     if (user) {
       setFormData(prev => ({
         ...prev,
-        email: user.email || ''
+        email: user.email || '',
+        cardName: (user.firstName + ' ' + user.lastName)
       }));
     }
   }, [user]);
@@ -94,29 +116,36 @@ const PaymentInterface = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-// console.log('im here')
-    // if (!validateForm()) {
-    //   return;
-    // }
+console.log('im here')
+    if (!validateForm()) {
+      return;
+    }
 
     try {
-        // console.log('im here')
+        console.log('im here')
 
       const paymentDetails = {
-        amount: currentBooking?.totalPrice || 0,
-        currency: 'USD',
+        amount: booking?.totalPrice || 0,
+        currency: 'INR',
         cardName: formData.cardName,
         cardLast4: formData.cardNumber.slice(-4),
+        cardNumber:formData.cardNumber,
         email: formData.email,
         address: formData.address,
-        bookingId: currentBooking?._id
+        expiryDate: formData.expiryDate,
+        cvv: formData.cvv
       };
 
-      const result = await processPayment(paymentDetails);
+      console.log(paymentDetails)
+      const result = await processPayment(booking._id,paymentDetails);
+      console.log(result)
       
-      setToastMessage(`Payment successful! Transaction ID: ${result.transactionId}`);
+      if(result){setToastMessage(`Payment successful! Transaction ID: ${result?.transaction?.transactionId}`);
       setToastType('success');
       setShowToast(true);
+      // navigate('/');
+      // setCurrentBooking(null);
+    }
 
       // Clear form
       setTimeout(() => {
@@ -148,34 +177,34 @@ const PaymentInterface = () => {
     });
   };
 
-  return (
-    <div className="payment-container">
+  return (<>
+    {!booking?<Loading text='Loading payment page...' fullPage='true' />:<div className="payment-container">
       <div className="payment-wrapper">
         {/* Order Summary */}
         <div className="payment-summary">
           <h2>Order Summary</h2>
-          {currentBooking ? (
+          {booking ? (
             <div className="summary-details">
               <div className="summary-item">
                 <span>Check-in:</span>
-                <span>{new Date(currentBooking.checkIn).toLocaleDateString()}</span>
+                <span>{new Date(booking.checkIn).toLocaleDateString()}</span>
               </div>
               <div className="summary-item">
                 <span>Check-out:</span>
-                <span>{new Date(currentBooking.checkOut).toLocaleDateString()}</span>
+                <span>{new Date(booking.checkOut).toLocaleDateString()}</span>
               </div>
               <div className="summary-item">
                 <span>Nights:</span>
-                <span>{Math.ceil(((new Date(currentBooking.checkOut).getTime())-(new Date(currentBooking.checkIn).getTime()))/(1000*60*60*24)) || 0}</span>
+                <span>{Math.ceil(((new Date(booking.checkOut).getTime())-(new Date(booking.checkIn).getTime()))/(1000*60*60*24)) || 0}</span>
               </div>
               <div className="summary-item">
                 <span>Price per night:</span>
-                <span>${currentBooking.pricePerNight || 0}</span>
+                <span>${booking.pricePerNight || 0}</span>
               </div>
               <div className="summary-divider"></div>
               <div className="summary-item total">
                 <span>Total Amount:</span>
-                <span>${currentBooking.totalPrice || 0}</span>
+                <span>${booking.totalPrice || 0}</span>
               </div>
             </div>
           ) : (
@@ -193,7 +222,7 @@ const PaymentInterface = () => {
               <h3>Payment Successful!</h3>
               <p>Transaction ID: <strong>{paymentData.transactionId}</strong></p>
               <p>Amount: <strong>${paymentData.amount}</strong></p>
-              <p>Date: <strong>{new Date(paymentData.timestamp).toLocaleString()}</strong></p>
+              <p>Date: <strong>{new Date(paymentData.createdAt).toLocaleString()}</strong></p>
               <Button 
                 label="Make Another Payment" 
                 onClick={handleReset}
@@ -304,7 +333,7 @@ const PaymentInterface = () => {
                 ) : (
                   <>
                     <Button
-                      label={`Pay $${currentBooking?.totalPrice || 0}`}
+                      label={`Pay $${booking?.totalPrice || 0}`}
                       type="submit"
                       onClick={handleSubmit}
                       className="btn-primary btn-pay"
@@ -329,15 +358,15 @@ const PaymentInterface = () => {
       </div>
 
       {/* Toast Notification */}
-      {showToast && (
-        <Toast
-          message={toastMessage}
-          type={toastType}
-          onClose={() => setShowToast(false)}
-        />
-      )}
-    </div>
-  );
+      <Toast
+        show={showToast}
+        message={toastMessage}
+        type={toastType}
+        position='top-center'
+        onClose={() => setShowToast(false)}
+      />
+    </div>}
+  </>);
 };
 
 export default PaymentInterface;

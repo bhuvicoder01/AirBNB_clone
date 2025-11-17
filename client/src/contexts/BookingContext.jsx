@@ -49,7 +49,7 @@ export const BookingProvider = ({ children }) => {
     // TODO: Replace with actual API call
     const newBooking = {
       ...bookingData,
-      status: 'confirmed',
+      status: 'pending',
     }
     ;
     const response=await bookingAPI.create(newBooking)

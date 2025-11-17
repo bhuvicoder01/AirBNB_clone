@@ -120,4 +120,62 @@ body {
   }
 }
 
-/* for dark mode */
+/*Table responsive and designer with hovering effects*/
+/* Table styles */
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.custom-table th {
+  background-color: #f8f9fa;
+  color: var(--dark-gray);
+  font-weight: 600;
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.custom-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #dee2e6;
+  transition: background-color 0.2s ease;
+}
+
+.custom-table tr:hover td {
+  background-color: #f8f9fa;
+}
+
+.custom-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Responsive table adjustments */
+@media (max-width: 768px) {
+  .custom-table th,
+  .custom-table td {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+  
+  .custom-table {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .custom-table th,
+  .custom-table td {
+    padding: 0.5rem;
+    font-size: 0.8rem;
+  }
+}

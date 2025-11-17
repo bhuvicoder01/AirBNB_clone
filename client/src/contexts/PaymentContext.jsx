@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from "react";
+import { paymentAPI } from "../services/api";
 
 const PaymentContext = createContext();
 
@@ -16,25 +17,17 @@ export const PaymentProvider = ({ children }) => {
   const [paymentStatus, setPaymentStatus] = useState(null);
   const [paymentError, setPaymentError] = useState(null);
 
-  const processPayment = async (paymentDetails) => {
+  const processPayment = async (bookingId,paymentDetails) => {
     setIsPaymentLoading(true);
     setPaymentError(null);
     try {
-      // Mock payment processing - simulates API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      const response=await paymentAPI.createIntent(bookingId,paymentDetails);
       
-      const mockResponse = {
-        success: true,
-        transactionId: `TXN-${Date.now()}`,
-        amount: paymentDetails.amount,
-        currency: 'USD',
-        timestamp: new Date().toISOString(),
-        status: 'completed'
-      };
       
-      setPaymentData(mockResponse);
+      setPaymentData(response.data.transaction||[]);
       setPaymentStatus('completed');
-      return mockResponse;
+      return response.data;
     } catch (error) {
       setPaymentError(error.message);
       setPaymentStatus('failed');
