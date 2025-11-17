@@ -15,7 +15,7 @@ class TransactionController{
                 }
                 if(booking.status==='confirmed' || booking.payment.status==='paid'){
                     const transaction=await transactionModel.findOne({bookingId:bookingId});
-                    return res.status(200).json({message:"Booking already confirmed and paid",transaction})
+                    return res.status(200).json({message:"Booking already confirmed and paid",transaction,success:'false'})
                 }
             }
             let body={

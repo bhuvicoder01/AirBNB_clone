@@ -140,11 +140,25 @@ console.log('im here')
       const result = await processPayment(booking._id,paymentDetails);
       console.log(result)
       
-      if(result){setToastMessage(`Payment successful! Transaction ID: ${result?.transaction?.transactionId}`);
+      if(result?.success==='true'){
+        if(result?.transaction?.status==='paid')
+          {setToastMessage(`Payment successful! Transaction ID: ${result?.transaction?.transactionId}`);
       setToastType('success');
       setShowToast(true);
+    }
+    
       // navigate('/');
       // setCurrentBooking(null);
+    }
+    else if(result?.success==='false' && result?.message==='Booking already confirmed and paid'){
+      setToastMessage(`${result?.message} with Transaction ID: ${result?.transaction?.transactionId}`);
+      setToastType('success');
+      setShowToast(true);
+    }
+    else if(result?.transaction?.status==='failed'){
+      setToastMessage(`Payment failed! Transaction ID: ${result?.transaction?.transactionId}`);
+      setToastType('error');
+      setShowToast(true);
     }
 
       // Clear form
