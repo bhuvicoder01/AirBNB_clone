@@ -3,18 +3,20 @@ import { useAuth } from '../../contexts/AuthContext';
 import Modal from '../common/Modal';
 
 const ProfileCard = ({}) => {
-  // showEdit controls whether the Edit button is visible
   const [showEdit] = useState(true);
   const { user, updateProfile } = useAuth();
-  
 
-  // modal visibility and form state
   const [showModal, setShowModal] = useState(false);
-  const [form, setForm] = useState({ firstName: '',lastName:'', email: '', avatar: '' });
+  const [form, setForm] = useState({ firstName: '', lastName: '', email: '', avatar: '' });
 
   useEffect(() => {
     if (user) {
-      setForm({ firstName: user?.firstName||'', lastName: user?.lastName || '', email: user?.email || '', avatar: user?.avatar?.url || '' });
+      setForm({ 
+        firstName: user?.firstName || '', 
+        lastName: user?.lastName || '', 
+        email: user?.email || '', 
+        avatar: user?.avatar?.url || '' 
+      });
     }
   }, [user]);
 
@@ -30,9 +32,9 @@ const ProfileCard = ({}) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    //check file type
     if (file && !file.type.startsWith('image/')) {
       alert('Please select an image file');
       return;
@@ -40,32 +42,39 @@ const ProfileCard = ({}) => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
+        console.log('Base64 image data:', reader.result); // Debug base64 on mobile
+        alert(`render data: ${reader?.result?.slice(0, 100)}...`)
         setForm((prev) => ({ ...prev, avatar: reader.result }));
+      };
+      reader.onerror = () => {
+        alert('Failed to read file! Please try again.');
       };
       reader.readAsDataURL(file);
     }
   };
 
-
   const handleSave = () => {
-    // Basic validation: require name and email
-    if (!form.firstName.trim() || !form.lastName.trim()|| !form.email.trim()) {
-      // keep it simple: use alert for now
+    if (!form.firstName.trim() || !form.lastName.trim() || !form.email.trim()) {
       alert('Name and email are required');
       return;
     }
 
-    // update auth context (this also persists to localStorage in AuthContext)
-    updateProfile({ firstName: form.firstName.trim() ,lastName: form.lastName.trim(), email: form.email.trim(), avatar: form.avatar.trim() });
+    // Send avatar as-is (no trim) to avoid corrupting base64 string
+    updateProfile({ 
+      firstName: form.firstName.trim(),
+      lastName: form.lastName.trim(),
+      email: form.email.trim(),
+      avatar: form.avatar 
+    });
     setShowModal(false);
   };
 
   return (
     <>
-      <div className="card mt-2"style={{minWidth:'80%',paddingInline:'10%',marginInline:'5%'}}>
-        <div className="card-body text-center"style={{justifyContent:'center'}}>
+      <div className="card mt-2" style={{ minWidth: '80%', paddingInline: '10%', marginInline: '5%' }}>
+        <div className="card-body text-center" style={{ justifyContent: 'center' }}>
           <img
-            src={user?.avatar?.url}
+            src={form.avatar || user?.avatar?.url}
             alt={user?.firstName}
             className="rounded-circle mb-3"
             style={{ width: '120px', height: '120px', objectFit: 'cover' }}
@@ -98,10 +107,10 @@ const ProfileCard = ({}) => {
               Superhost
             </span>
           )}
-          <br/>
+          <br />
 
           {showEdit && (
-            <button className="btn btn-outline-dark "style={{minWidth:'50%'}} onClick={onEdit}>
+            <button className="btn btn-outline-dark" style={{ minWidth: '50%' }} onClick={onEdit}>
               <i className="bi bi-pencil me-2"></i>
               Edit Profile
             </button>
@@ -110,14 +119,16 @@ const ProfileCard = ({}) => {
           <div className="mt-4 pt-4 border-top">
             <div className="d-flex justify-content-between mb-2">
               <span>😎 <span className="text-muted">Member since</span></span>
-              <span className="fw-semibold">{new Date((user?.createdAt)).toLocaleDateString()}</span>
+              <span className="fw-semibold">{new Date(user?.createdAt).toLocaleDateString()}</span>
             </div>
-            {user?.role==="host" && <div className="d-flex justify-content-between">
-              <span className="text-muted">Verified</span>
-              <span>
-                <i className="bi bi-patch-check-fill text-success"></i>
-              </span>
-            </div>}
+            {user?.role === "host" && (
+              <div className="d-flex justify-content-between">
+                <span className="text-muted">Verified</span>
+                <span>
+                  <i className="bi bi-patch-check-fill text-success"></i>
+                </span>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -168,9 +179,6 @@ const ProfileCard = ({}) => {
             name="email"
             value={form.email}
             readOnly
-            // onChange={handleChange}
-            //forbidChange
-
           />
         </div>
 
@@ -184,7 +192,8 @@ const ProfileCard = ({}) => {
             onChange={handleChange}
           />
         </div>
-        {/*chage avatar using file image base 64 data */}
+
+        {/* Change avatar using file image base64 data */}
         <div className="mb-3">
           <label className="form-label">Avatar</label>
           <input
@@ -193,6 +202,14 @@ const ProfileCard = ({}) => {
             name="avatar"
             onChange={handleFileChange}
           />
+          {/* Preview the image before saving */}
+          {form.avatar && (
+            <img
+              src={form.avatar}
+              alt="Avatar preview"
+              style={{ width: '100px', height: '100px', objectFit: 'cover', marginTop: '10px' }}
+            />
+          )}
         </div>
       </Modal>
     </>
