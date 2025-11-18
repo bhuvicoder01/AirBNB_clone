@@ -27,6 +27,9 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization'], // Allow necessary headers
 }));
 
+app.use(express.json({ limit: '50mb' })); // increase size as needed
+app.use(express.urlencoded({ extended: true, limit: '20mb' }));
+
 MongoDB.connect(process.env.MONGODB_URI)
 
 
