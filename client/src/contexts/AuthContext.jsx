@@ -97,7 +97,7 @@ export const AuthProvider = ({ children }) => {
   }
     
     catch(error){
-      alert(error?.response?.data?.message)
+      alert(error)
       console.error(error)
 
     }
