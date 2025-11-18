@@ -19,6 +19,8 @@ app.use(cookieParser())
 // app.use(express.urlencoded({extended:true}))
 //add json limit 
 // app.use(express.json({ limit: '50mb' }));
+app.use(express.json({ limit: '50mb' })); // increase size as needed
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 app.use(cors({
     origin:['https://airbnb-clone-phi-jade.vercel.app','http://localhost:5173'],
@@ -27,8 +29,7 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization'], // Allow necessary headers
 }));
 
-app.use(express.json({ limit: '50mb' })); // increase size as needed
-app.use(express.urlencoded({ extended: true, limit: '20mb' }));
+
 
 MongoDB.connect(process.env.MONGODB_URI)
 
