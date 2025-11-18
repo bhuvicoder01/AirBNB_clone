@@ -3,11 +3,28 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import LoginForm from '../components/user/LoginForm';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import Loading from '../components/common/Loading';
 
 const Login = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const {login,user,logout} = useAuth();
   const { t } = useLanguage();
+  const [isLoading,setIsLoading]=useState(true)
+
+
+  useEffect(()=>{
+    if(localStorage.getItem('user')===''){
+      console.log('logging out')
+      logout()
+    }
+    if(localStorage.getItem('user')||user!==null){
+      // console.log(user)
+      navigate('/')
+    }
+    setIsLoading(false)
+  },[user])
 
   const handleLogin = async (credentials) => {
     try {
@@ -18,7 +35,8 @@ const Login = () => {
     }
   };
 
-  return (
+  return (<>
+  {isLoading? <Loading fullPage='true'/>:
     <div className="container">
       <div className="row justify-content-center mt-5">
         <div className="col-md-5">
@@ -39,7 +57,8 @@ const Login = () => {
           </div>
         </div>
       </div>
-    </div>
+    </div>}
+    </>
   );
 };
 

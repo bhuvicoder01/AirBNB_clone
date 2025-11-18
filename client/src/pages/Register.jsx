@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -6,8 +6,19 @@ import RegisterForm from '../components/user/RegisterForm';
 
 const Register = () => {
   const navigate = useNavigate();
-  const { register } = useAuth();
+  const { register,user,logout } = useAuth();
   const { t } = useLanguage();
+
+   useEffect(()=>{
+    if(localStorage.getItem('user')===''){
+      console.log('logging out')
+      logout()
+    }
+    if(localStorage.getItem('user')||user!==null){
+      // console.log(user)
+      navigate('/')
+    }
+  },[user])
 
   const handleRegister = async (userData) => {
     try {

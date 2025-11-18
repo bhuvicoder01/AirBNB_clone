@@ -30,22 +30,40 @@ const PaymentInterface = ({}) => {
   const [toastType, setToastType] = useState('success');
   const [booking, setBooking] = useState(null);
   const {id} = useParams();
+  const [isLoading,setIsLoading]=useState(true)
 
   useEffect(() => {
     const fetchBooking = async () => {
       if (id) {
         try {
+          // console.log(id)
           const bookingData = await getBookingById(id);
           setBooking(bookingData);
+          // console.log(bookingData)
+          
           if(booking?.status==='confirmed'&&booking?.payment?.status==='paid'){
+                      setIsLoading(false)
+
             setToastMessage('Booking already paid');
             setToastType('error');
             setShowToast(true);
             setPaymentStatus('completed')
             // setTimeout(() => navigate('/'), 3000);
-
           }
+
+          else if(bookingData===null){
+                      setIsLoading(false)
+
+            setToastMessage('Booking not found');
+            setToastType('error');
+            setShowToast(true)
+            return ()=>{
+              setTimeout(() => navigate('/'), 3000);
+          }
+        }
         } catch (error) {
+                    setIsLoading(false)
+
           setToastMessage('Booking not found');
           setToastType('error');
           setShowToast(true);
@@ -148,7 +166,7 @@ console.log('im here')
 
       console.log(paymentDetails)
       const result = await processPayment(booking._id,paymentDetails);
-      console.log(result)
+      // console.log(result)
       
       if(result?.success==='true'){
         if(result?.transaction?.status==='paid')
@@ -202,7 +220,7 @@ console.log('im here')
   };
 
   return (<>
-    {!booking?<Loading text='Loading payment page...' fullPage='true' />:<div className="payment-container">
+    {!booking&&isLoading?<Loading text='Loading payment page...' fullPage='true' />:<div className="payment-container">
       <div className="payment-wrapper">
         {/* Order Summary */}
         <div className="payment-summary">
@@ -249,7 +267,7 @@ console.log('im here')
               <p>Date: <strong>{new Date(paymentData.createdAt).toLocaleString()}</strong></p>
               <Button 
                 label="Make Another Payment" 
-                onClick={handleReset}
+                onClick={()=>navigate('/payment')}
                 className="btn-primary"
               />
             </div>
@@ -262,8 +280,8 @@ console.log('im here')
               <p>Amount: <strong>${booking?.totalPrice}</strong></p>
               <p>Date: <strong>{new Date(booking?.payment?.createdAt).toLocaleString()}</strong></p>
               <Button
-                label="Go Back"
-                onClick={()=>navigate('/')}
+                label="Make another payment"
+                onClick={()=>navigate('/payment')}
                 className="btn-primary"
               />
             </div>
@@ -374,6 +392,7 @@ console.log('im here')
                       label={`Pay $${booking?.totalPrice || 0}`}
                       type="submit"
                       onClick={handleSubmit}
+                      disabled={!booking}
                       className="btn-primary btn-pay"
                       
                     />

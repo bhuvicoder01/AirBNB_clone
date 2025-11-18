@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useBooking } from '../contexts/BookingContext';
 import { useLanguage } from '../contexts/LanguageContext';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Card from '../components/common/Card';
 import Button from '../components/common/Button';
 import Loading from '../components/common/Loading';
@@ -13,6 +13,7 @@ const Bookings = () => {
   const { t, language } = useLanguage();
   const{properties}=useProperty();
   const {isLoading, userBookings, cancelBooking } = useBooking();
+  const navigate=useNavigate()
   
   useEffect(() => {
     console.log('Language changed to:', language);
@@ -23,10 +24,10 @@ const Bookings = () => {
   const bookings = userBookings||[]
   // console.log(bookings)
   const upcomingBookings = bookings.filter(b => 
-    b?.status === 'confirmed' && new Date(b?.checkIn) > new Date() 
+    (b?.status === 'confirmed'||b?.status==='pending') && new Date(b?.checkIn).getDate() >= new Date().getDate() 
   );
   const pastBookings = bookings.filter(b => 
-    b?.status === 'completed' || new Date(b?.checkOut) < new Date()
+    b?.status === 'completed' || new Date(b?.checkOut).getDate() < new Date().getDate()
   );
   const cancelledBookings = bookings?.filter(b => b?.status === 'cancelled');
 
@@ -39,6 +40,7 @@ const Bookings = () => {
   const BookingCard = ({ booking }) => (
     <Card shadow className="mb-3">
       <div className="row g-0">
+        <span style={{fontFamily:'fantasy',color:`${booking.status==='cancelled'?'red':(booking.status==='pending'?'orange':'green')}`}}>{booking?.status==='pending'?'🤧Not confirmed':(booking.status==='cancelled'?'😵Cancelled':'😎Confirmed')}</span>
         <div className="col-md-4">
           <img
             src={properties.filter(p=>p._id===booking.propertyId)[0]?.images[0]}
@@ -68,7 +70,16 @@ const Bookings = () => {
                   {t('view')} Property
                 </Button>
               </Link>
-              {booking.status === 'confirmed' && new Date(booking.checkIn) > new Date() && (
+              {(booking?.status === 'confirmed'||booking?.status==='pending')&&booking?.payment?.status==='pending' && new Date(booking.checkIn).getDate >= new Date().getDate && (
+                <Button 
+                  variant="success" 
+                  size="sm"
+                  onClick={() => navigate(`/payment/booking/${booking._id}`)}
+                >
+                  {t('Pay')} to Confirm
+                </Button>
+              )}
+              {(booking?.status === 'confirmed'|| booking?.status==='pending') && new Date(booking?.checkIn).getDate >= new Date().getDate && (
                 <Button 
                   variant="warning" 
                   size="sm"

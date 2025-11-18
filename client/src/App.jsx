@@ -34,11 +34,11 @@ function App() {
                 <WishlistProvider>
               <Routes>
                 {/* Isolated Payment Route - No Layout */}
-                <Route path='/payment' element={<PaymentPage/>}/>
                 <Route path='/payment/booking/:id' element={<PaymentInterface/>}/>
                 
                 {/* All other routes with Layout */}
                 <Route element={<Layout />}>
+                 <Route path='/payment' element={<PaymentPage/>}/>
                   <Route path="/" element={<Home />} />
                   <Route path="/search" element={<SearchResults />} />
                   <Route path="/property/:id" element={<PropertyDetailsPage />} />

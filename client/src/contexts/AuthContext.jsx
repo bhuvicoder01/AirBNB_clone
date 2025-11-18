@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { authAPI, userAPI } from '../services/api';
 
@@ -12,9 +13,10 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem('user'))|null);
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('user'))||null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
+  const navigate=useNavigate();
 
   useEffect(() => {
     // Check if user is logged in (from localStorage)
