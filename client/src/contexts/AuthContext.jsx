@@ -89,8 +89,15 @@ export const AuthProvider = ({ children }) => {
     if(response.status===200){
       setUser(response.data.user);
       localStorage.setItem('user', JSON.stringify(response.data.user));
-    }}
+    }
+      else if(response.status===500){
+        alert(response?.data?.message)
+      console.log("error updating profile response from the server")
+    }
+  }
+    
     catch(error){
+      alert(error?.response?.data?.message)
       console.error(error)
 
     }

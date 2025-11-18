@@ -43,8 +43,8 @@ const ProfileCard = ({}) => {
       const reader = new FileReader();
       reader.onloadend = () => {
         console.log('Base64 image data:', reader.result); // Debug base64 on mobile
-        alert(`render data: ${reader?.result?.slice(0, 100)}...`)
-        setForm((prev) => ({ ...prev, avatar: reader.result }));
+        setForm((prev) => ({ ...prev, avatar: reader?.result }));
+        alert(`form data: ${form?.avatar?.slice(0, 100)}...`)
       };
       reader.onerror = () => {
         alert('Failed to read file! Please try again.');
