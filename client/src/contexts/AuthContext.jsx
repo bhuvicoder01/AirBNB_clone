@@ -81,9 +81,16 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('user');
   };
 
-  const updateProfile =async (updates) => {
-    const updatedUser = { ...user, ...updates };
-    try{const response=await userAPI.updateProfile(updatedUser)
+  const updateProfile =async (userId,formData) => {
+    // const updatedUser = { ...user, ...updates };
+    try{
+//       for (const pair of formData.entries()) {
+//   console.log(`${pair[0]}: ${pair[1]}`);
+// }
+if(!formData){
+  return 
+}
+      const response=await userAPI.updateProfile(userId,formData)
   
 
     if(response.status===200){

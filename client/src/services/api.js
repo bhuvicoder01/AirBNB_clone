@@ -6,6 +6,7 @@ const API_URL = import.meta.env.VITE_API_URL||'https://airbnb-clone-2cp7.onrende
 // Create axios instance with default config
 const api = axios.create({
   baseURL: API_URL,
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json'
   }
@@ -101,7 +102,9 @@ export const userAPI = {
   getUsersWishList:(userId)=>api.get(`/users/${userId}/wishlist`),
   addToWishlist:(wishlistData)=>api.post('/users/wishlist',wishlistData),
   removeFromWishList:(propertyId,userId)=>api.delete(`/users/${userId}/wishlist/${propertyId}`),
-  updateProfile: (userData) => api.put('/users/profile', userData),
+  updateProfile: (userId,userData) => api.put(`/users/${userId}/profile`, userData,{
+    headers: { 'Content-Type': 'multipart/form-data' }
+  }),
   uploadAvatar: (formData) => api.post('/users/avatar', formData, {
     headers: { 'Content-Type': 'multipart/form-data' }
   })

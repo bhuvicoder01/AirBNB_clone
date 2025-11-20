@@ -8,14 +8,22 @@ const ProfileCard = ({}) => {
 
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState({ firstName: '', lastName: '', email: '', avatar: '' });
+  const [avatar, setAvatar] = useState(null);
+  const formData=new FormData();
+
+  //  const reader = new FileReader();
+  //     reader.onloadend=async()=>setAvatar(reader?.result)
+  //     reader.onerror = () => {
+  //       alert('Failed to read file! Please try again.');
+  //     };
 
   useEffect(() => {
     if (user) {
       setForm({ 
-        firstName: user?.firstName || '', 
-        lastName: user?.lastName || '', 
-        email: user?.email || '', 
-        avatar: user?.avatar?.url || '' 
+        firstName: user?.firstName , 
+        lastName: user?.lastName , 
+        email: user?.email , 
+        avatar: user?.avatar?.url 
       });
     }
   }, [user]);
@@ -33,40 +41,42 @@ const ProfileCard = ({}) => {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleFileChange = (e) => {
+  const handleFileChange =async (e) => {
     const file = e.target.files[0];
     if (file && !file.type.startsWith('image/')) {
       alert('Please select an image file');
       return;
     }
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        console.log('Base64 image data:', reader.result); // Debug base64 on mobile
-        setForm((prev) => ({ ...prev, avatar: reader?.result }));
-        alert(`form data: ${form?.avatar?.slice(0, 100)}...`)
-      };
-      reader.onerror = () => {
-        alert('Failed to read file! Please try again.');
-      };
-      reader.readAsDataURL(file);
+      
+      // console.log(formData.getAll('avatar'))
+   
+    //  setAvatar(URL.createObjectURL(file));
+      formData.append('avatar', file)
+
+
     }
   };
 
-  const handleSave = () => {
+  const handleSave = async() => {
     if (!form.firstName.trim() || !form.lastName.trim() || !form.email.trim()) {
       alert('Name and email are required');
       return;
     }
 
     // Send avatar as-is (no trim) to avoid corrupting base64 string
-    updateProfile({ 
-      firstName: form.firstName.trim(),
-      lastName: form.lastName.trim(),
-      email: form.email.trim(),
-      avatar: form.avatar 
-    });
+    
+    formData.append('firstName', form.firstName.trim()||user?.firstName)
+    formData.append('lastName', form.lastName.trim()||user?.lastName)
+    formData.append('email', form.email.trim()||user?.email)
+    // formData.append('avatar', form.avatar)
+
+    updateProfile(user?._id,formData);
     setShowModal(false);
+    // setAvatar(null)
+    // console.log(formData.getAll('avatar'))
+    // updateProfile(formData);
+    // setShowModal(false);
   };
 
   return (
@@ -188,8 +198,9 @@ const ProfileCard = ({}) => {
             type="text"
             className="form-control"
             name="avatar"
+            readOnly
             value={form.avatar}
-            onChange={handleChange}
+            // onChange={handleChange}
           />
         </div>
 
@@ -198,18 +209,19 @@ const ProfileCard = ({}) => {
           <label className="form-label">Avatar</label>
           <input
             type="file"
+            accept='image/*'
             className="form-control"
             name="avatar"
             onChange={handleFileChange}
           />
           {/* Preview the image before saving */}
-          {form.avatar && (
+          {/* {avatar && (
             <img
-              src={form.avatar}
+              src={avatar}
               alt="Avatar preview"
               style={{ width: '100px', height: '100px', objectFit: 'cover', marginTop: '10px' }}
             />
-          )}
+          )} */}
         </div>
       </Modal>
     </>

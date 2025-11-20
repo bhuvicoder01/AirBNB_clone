@@ -49,6 +49,7 @@ const PropertyCard = ({ property }) => {
             aria-label={inWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
             className="btn btn-link position-absolute top-0 end-0 m-2 p-2 bg-white bg-opacity-75 rounded-circle"
             onClick={handleWishlistToggle}
+            id={`wishlistbtn-${property._id}`}
           >
             <i className={`bi ${inWishlist ? 'bi-heart-fill text-danger' : 'bi-heart'}`}></i>
           </button>

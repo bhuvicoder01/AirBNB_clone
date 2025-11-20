@@ -9,18 +9,22 @@ const propertyRoutes=require('./routes/property')
 const bookingRoutes=require('./routes/booking')
 const paymentRoutes=require('./routes/payment')
 const cors=require('cors')
+const fileUpload=require('express-fileupload')
 
 
 const app=express()
+// app.use(fileUpload({
+//     useTempFiles: true
+// }))
 
 
-app.use(express.json())
+
+
 app.use(cookieParser())
 // app.use(express.urlencoded({extended:true}))
 //add json limit 
 // app.use(express.json({ limit: '50mb' }));
-app.use(express.json({ limit: '50mb' })); // increase size as needed
-app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+// app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 app.use(cors({
     origin:['https://airbnb-clone-phi-jade.vercel.app','http://localhost:5173'],
@@ -28,6 +32,9 @@ app.use(cors({
     methods: ['GET', 'POST','PATCH', 'PUT', 'DELETE', 'OPTIONS'], // Explicitly allow methods
     allowedHeaders: ['Content-Type', 'Authorization'], // Allow necessary headers
 }));
+
+app.use(express.json({ limit: '50mb' })); // increase size as needed
+// app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 
 
