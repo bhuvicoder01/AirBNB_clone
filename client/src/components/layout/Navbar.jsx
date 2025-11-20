@@ -14,20 +14,20 @@ const Navbar = () => {
 
   return (<>
     <nav className="navbar navbar-expand-lg navbar-light  sticky-top"style={{backgroundColor:'transparent'}}>
-      <div className="container-fluid  py-2 px-2 "style={{backgroundColor:'rgba(255, 255, 255, 0.82)',borderRadius:'20px',marginInline:'4%'}}>
+      <div className="container-fluid  py-2 px-0 "style={{backgroundColor:'rgba(255, 255, 255, 0.82)',borderRadius:'20px',marginInline:'2%'}}>
         {/* Logo */}
         <Link to="/" className="navbar-brand d-flex align-items-center">
-          <i className="bi bi-house-heart-fill text-danger fs-3 me-2"></i>
+          <i className="bi bi-house-heart-fill text-danger fs-3 me-0"></i>
           <span className="fw-bold airbnb-logo">Wandora</span>
         </Link>
 
         {/* Search Bar - Desktop */}
-        <div className="d-none d-md-block flex-grow-1 mx-5">
+        <div className="d-none d-md-block flex-grow-1 mx-0 px-0 ">
           <SearchBar compact={true} />
         </div>
 
         {/* Right Side Menu */}
-        <div className="d-flex align-items-center gap-3">
+        <div className="d-flex align-items-center gap-1">
           {/* Become a Host */}
           {user?.role!=='host' ? (<Link 
             to="/apply/host" 
@@ -36,7 +36,7 @@ const Navbar = () => {
             Become a Host
           </Link>):(<Link 
             to="/host/dashboard" 
-            className="text-decoration-none text-dark fw-bold d-none d-lg-block host-link"
+            className="text-decoration-none bi bi-speedometer px-1 text-dark fw-bold d-none d-lg-block host-link"
           >
             Dashboard
           </Link>)}
