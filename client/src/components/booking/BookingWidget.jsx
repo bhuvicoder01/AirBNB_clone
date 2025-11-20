@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useBooking } from '../../contexts/BookingContext';
 import Calendar from './Calendar';
+import DateRangePicker from '../search/DateRangePicker';
 import PriceBreakdown from './PriceBreakdown';
 import { calculateNights } from '../../utils/dateUtils';
 import { calculateTotalPrice } from '../../utils/priceCalculator';
@@ -15,7 +16,8 @@ const BookingWidget = ({ property }) => {
   const [checkIn, setCheckIn] = useState(null);
   const [checkOut, setCheckOut] = useState(null);
   const [guests, setGuests] = useState(1);
-  const [showCalendar, setShowCalendar] = useState(false);
+  const [showCheckInModal, setShowCheckInModal] = useState(false);
+  const [showCheckOutModal, setShowCheckOutModal] = useState(false);
 
 
   const nights = checkIn && checkOut ? calculateNights(checkIn, checkOut) : 0;
@@ -91,7 +93,8 @@ const BookingWidget = ({ property }) => {
             <div className="col-6 border-end">
               <div 
                 className="p-3 cursor-pointer"
-                onClick={() => setShowCalendar(!showCalendar)}
+                onClick={() => setShowCheckInModal(true)}
+                style={{ cursor: 'pointer' }}
               >
                 <label className="small fw-semibold d-block">CHECK-IN</label>
                 <div className="text-muted small">
@@ -102,7 +105,8 @@ const BookingWidget = ({ property }) => {
             <div className="col-6">
               <div 
                 className="p-3 cursor-pointer"
-                onClick={() => setShowCalendar(!showCalendar)}
+                onClick={() => checkIn ? setShowCheckOutModal(true) : setShowCheckInModal(true)}
+                style={{ cursor: 'pointer' }}
               >
                 <label className="small fw-semibold d-block">CHECKOUT</label>
                 <div className="text-muted small">
@@ -128,22 +132,29 @@ const BookingWidget = ({ property }) => {
           </div>
         </div>
 
-        {/* Calendar Popup */}
-        {showCalendar && (
-          <div className="mb-3">
-            <Calendar
-              checkIn={checkIn}
-              checkOut={checkOut}
-              onDateSelect={(dates) => {
-                setCheckIn(dates.checkIn);
-                setCheckOut(dates.checkOut);
-                if (dates.checkOut) {
-                  setShowCalendar(false);
-                }
-              }}
-            />
-          </div>
-        )}
+        {/* Check-in Date Picker Modal */}
+        <DateRangePicker
+          value={{ checkIn, checkOut }}
+          onChange={(dates) => {
+            setCheckIn(dates.checkIn);
+            if (dates.checkOut) setCheckOut(dates.checkOut);
+          }}
+          isOpen={showCheckInModal}
+          onClose={() => setShowCheckInModal(false)}
+          mode="checkIn"
+        />
+
+        {/* Check-out Date Picker Modal */}
+        <DateRangePicker
+          value={{ checkIn, checkOut }}
+          onChange={(dates) => {
+            if (dates.checkIn) setCheckIn(dates.checkIn);
+            setCheckOut(dates.checkOut);
+          }}
+          isOpen={showCheckOutModal}
+          onClose={() => setShowCheckOutModal(false)}
+          mode="checkOut"
+        />
 
         {/* Reserve Button */}
         <button 

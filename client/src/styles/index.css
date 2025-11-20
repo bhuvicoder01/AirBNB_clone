@@ -85,13 +85,160 @@ body {
 .calendar-day {
   aspect-ratio: 1;
   min-height: 40px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border-radius: 8px;
+}
+
+.calendar-day:hover:not(:disabled) {
+  transform: scale(1.05);
 }
 
 .calendar-day-header {
   padding: 8px 0;
+  font-weight: 600;
+  color: var(--dark-gray);
 }
-.date-range-picker{
-  left:'-100%';
+
+.calendar-month {
+  padding: 1.5rem;
+  background: #fff;
+  border-radius: 12px;
+  min-width: 320px;
+}
+
+.calendar-month h6 {
+  color: var(--dark-gray);
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.date-range-picker {
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+/* Modal enhancements */
+.modal.d-block {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-content {
+  border-radius: 16px;
+  border: none;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+  border-bottom: 1px solid #e0e0e0;
+  padding: 1.5rem;
+  background-color: #fafafa;
+  border-radius: 16px 16px 0 0;
+}
+
+.modal-header .modal-title {
+  font-weight: 600;
+  color: var(--dark-gray);
+}
+
+.modal-body {
+  padding: 2rem 1.5rem;
+}
+
+.modal-footer {
+  border-top: 1px solid #e0e0e0;
+  padding: 1.5rem;
+  background-color: #fafafa;
+  border-radius: 0 0 16px 16px;
+}
+
+.modal-footer .btn {
+  border-radius: 8px;
+  font-weight: 500;
+  padding: 0.5rem 1.5rem;
+}
+
+.modal-footer .btn-primary {
+  background-color: var(--airbnb-red);
+  border-color: var(--airbnb-red);
+}
+
+.modal-footer .btn-primary:hover:not(:disabled) {
+  background-color: #e14954;
+  border-color: #e14954;
+}
+
+.modal-footer .btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Calendar day button states */
+.calendar-day.btn-danger {
+  background-color: var(--airbnb-red);
+  border-color: var(--airbnb-red);
+  color: white;
+}
+
+.calendar-day.btn-light {
+  background-color: rgba(0, 166, 153, 0.1);
+  border-color: transparent;
+}
+
+.calendar-day.btn-outline-light {
+  border: 1px solid #e0e0e0;
+  background-color: #fff;
+}
+
+.calendar-day.disabled-date {
+  opacity: 0.3;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+.calendar-day:disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* Responsive calendar */
+@media (max-width: 768px) {
+  .modal-lg {
+    max-width: 90vw;
+  }
+
+  .calendar-month {
+    min-width: 280px;
+    padding: 1rem;
+  }
+
+  .modal-body {
+    padding: 1.5rem 1rem;
+  }
+
+  .calendar-grid {
+    gap: 2px;
+  }
+
+  .calendar-day {
+    min-height: 35px;
+    font-size: 0.9rem;
+  }
 }
 
 /* Loading Skeleton */
@@ -180,4 +327,8 @@ body {
     font-size: 0.8rem;
   }
 }
-/* change language of fonts */
+/* Booking widget date selection hover */
+.cursor-pointer:hover {
+  background-color: #f7f7f7;
+  transition: background-color 0.2s ease;
+}
