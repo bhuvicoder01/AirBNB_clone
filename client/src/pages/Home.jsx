@@ -80,7 +80,7 @@ const Home = () => {
           <div className="row g-4">
             {[
               {
-                city: "New York",
+                city: "Mumbai",
                 distance: "45 miles away",
                 image:
                   "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9",
@@ -98,7 +98,7 @@ const Home = () => {
                   "https://images.unsplash.com/photo-1506966953602-c20cc11f75e3",
               },
               {
-                city: "Seattle",
+                city: "Gwalior",
                 distance: "234 miles away",
                 image:
                   "https://images.unsplash.com/photo-1555667849-59ba7d8fd48c",
