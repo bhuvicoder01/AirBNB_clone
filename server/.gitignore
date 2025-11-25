@@ -7,6 +7,30 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencies
+client/node_modules/
+server/node_modules/
+node_modules/
+.pnp
+.pnp.js
+
+.env
+client/.env
+client/.env.development
+client/.env.production
+server/.env
+server/.env.development
+server/.env.production
+
+
+
+# Testing
+coverage/
+
+# Production
+build/
+dist/
+
 node_modules
 dist
 dist-ssr
