@@ -35,9 +35,9 @@ const NewListing = () => {
     amenities: [],
     host: {
         id:user?._id||'',
-      name: (user?.firstName+''+user?.lastName) || '',
+      name: (user?.firstName+' '+user?.lastName) || '',
       avatar: user?.avatar?.url || '',
-      superhost: false,
+      superhost: true,
       response_time: '1 hour'
     }
   });

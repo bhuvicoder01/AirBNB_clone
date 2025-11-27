@@ -1,13 +1,16 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useProperty } from "../contexts/PropertyContext";
 import { useLanguage } from "../contexts/LanguageContext";
 import PropertyGrid from "../components/property/PropertyGrid";
 import SearchBar from "../components/search/SearchBar";
+import { useAuth } from "../contexts/AuthContext";
 
 const Home = () => {
   const { properties, loading } = useProperty();
+  const {user}=useAuth()
   const { t } = useLanguage();
+  const navigate=useNavigate();
 
   const categories = [
     { name: "Beachfront", icon: "bi-water" },
@@ -17,6 +20,16 @@ const Home = () => {
     { name: "Mountains", icon: "fas fa-mountain-city" },
     { name: "Unique stays", icon: "bi-star" },
   ];
+
+  useEffect(() => {
+    if(user){
+      if(user.role==='host'){
+        navigate('/host/dashboard');
+        return; 
+      }
+    }
+  }, [user]);
+
 
   return (
     <div>

@@ -38,7 +38,7 @@ function App() {
                 
                 {/* All other routes with Layout */}
                 <Route element={<Layout />}>
-                 <Route path='/payment' element={<PaymentPage/>}/>
+                  <Route path='/payment' element={<PaymentPage/>}/>
                   <Route path="/" element={<Home />} />
                   <Route path="/search" element={<SearchResults />} />
                   <Route path="/property/:id" element={<PropertyDetailsPage />} />

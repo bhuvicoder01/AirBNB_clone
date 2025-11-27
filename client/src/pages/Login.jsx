@@ -28,8 +28,14 @@ const Login = () => {
 
   const handleLogin = async (credentials) => {
     try {
-      await login(credentials.email, credentials.password);
-      navigate('/');
+      const user=await login(credentials.email, credentials.password);
+      if(user){
+        if(user.role==='host'){
+          navigate('/host/dashboard');
+          return;
+        }
+        navigate('/');
+      }
     } catch (error) {
       console.error('Login failed:', error);
     }

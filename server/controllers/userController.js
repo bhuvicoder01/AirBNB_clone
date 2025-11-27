@@ -1,3 +1,4 @@
+const propertyModel = require("../models/Property")
 const userModel = require("../models/User")
 const cloudinary = require("../services/cloudinary")
 
@@ -17,6 +18,9 @@ try{
         await userModel.updateOne({_id:id},
             {$set:{firstName,lastName,email,avatar:{public_id:result?.public_id,url:result?.secure_url}}}, 
             { upsert: false })
+        await propertyModel.updateMany({hostId:id},{'host.avatar':result?.secure_url}
+            ,{ upsert: false }
+        )   
         }
         await userModel.updateOne({_id:id},
             {$set:{firstName,lastName,email}}, 

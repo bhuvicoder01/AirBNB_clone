@@ -10,25 +10,21 @@ import { useProperty } from '../contexts/PropertyContext';
 
 const Bookings = () => {
   const { user } = useAuth();
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
   const{properties}=useProperty();
   const {isLoading, userBookings, cancelBooking } = useBooking();
   const navigate=useNavigate()
-  
-  useEffect(() => {
-    console.log('Language changed to:', language);
-    console.log('Translation for myBookings:', t('myBookings'));
-  }, [language, t]);
   
   // console.log(user?._id)
   const bookings = userBookings||[]
   // console.log(bookings)
   const upcomingBookings = bookings.filter(b => 
-    (b?.status === 'confirmed'||b?.status==='pending') && new Date(b?.checkIn).getDate() >= new Date().getDate() 
+    (b?.status === 'confirmed'||b?.status==='pending') && new Date(b?.checkIn) >= new Date()
   );
-  const pastBookings = bookings.filter(b => 
-    b?.status === 'completed' || new Date(b?.checkOut).getDate() < new Date().getDate()
+  const pastBookings = bookings.filter(b => {
+    return b?.status === 'completed' || new Date(b?.checkOut) < new Date()}
   );
+
   const cancelledBookings = bookings?.filter(b => b?.status === 'cancelled');
 
   const handleCancelBooking = (bookingId) => {
@@ -41,10 +37,10 @@ const Bookings = () => {
     <Card shadow className="mb-3">
       <div className="row g-0">
         <span style={{fontFamily:'fantasy',color:`${booking.status==='cancelled'?'red':(booking.status==='pending'?'orange':'green')}`}}>{booking?.status==='pending'?'🤧Not confirmed':(booking.status==='cancelled'?'😵Cancelled':'😎Confirmed')}</span>
-        <div className="col-md-4">
+        <div className="col-md-4" style={{maxHeight:'200px'}}>
           <img
             src={properties.filter(p=>p._id===booking.propertyId)[0]?.images[0]}
-            className="img-fluid rounded-start h-100"
+            className="img-fluid rounded-start w-100 h-100"
             alt={booking.propertyTitle}
             style={{ objectFit: 'cover' }}
           />

@@ -12,6 +12,17 @@ const SearchBar = ({ compact = false }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showGuestPicker, setShowGuestPicker] = useState(false);
 
+  const handleDateChange = (dates) => {
+    // console.log(dates);
+    setDates(dates);
+  };
+  const handleGuestChange = (adults, children, infants) => {
+    setGuests({ adults, children, infants });
+  };
+  const handleGuestPickerClose = () => {
+    setShowGuestPicker(false);
+  };
+
   const handleSearch = () => {
     const searchParams = new URLSearchParams({
       location: location || '',
@@ -74,21 +85,21 @@ const SearchBar = ({ compact = false }) => {
           <div className="p-3 " onClick={() => setShowDatePicker(!showDatePicker)}>
             <label className="small fw-semibold">Check in / Check out</label>
             <div className="text-muted small">
-              {dates.checkIn && dates.checkOut 
-                ? `${dates.checkIn} - ${dates.checkOut}`
-                : 'Add dates'}
+              {dates?.checkIn && dates?.checkOut 
+                ? `${dates?.checkIn} - ${dates?.checkOut}`
+                : 'Add date'}
             </div>
           </div>
           {showDatePicker && (
             <div className="date-range-picker position-absolute top-100 mt-2 bg-white shadow-lg rounded p-3 z-3"style={{left:'-100%'}}>
-              <DateRangePicker value={dates} onChange={setDates} />
+              <DateRangePicker value={dates} onChange={handleDateChange} isOpen={showDatePicker} onClose={() => setShowDatePicker(false)} />
             </div>
           )}
         </div>
 
         {/* Guests */}
         <div className="col-md-3 position-relative">
-          <div className="p-3" onClick={() => setShowGuestPicker(!showGuestPicker)}>
+          <div className="p-3" onClick={() => setShowGuestPicker(!showGuestPicker)} style={{ cursor: 'pointer' }}>
             <label className="small fw-semibold">Who</label>
             <div className="text-muted small">
               {guests.adults + guests.children} guests
@@ -96,7 +107,7 @@ const SearchBar = ({ compact = false }) => {
           </div>
           {showGuestPicker && (
             <div className="position-absolute top-100 mt-2 bg-white shadow-lg rounded p-3 z-3">
-              <GuestCounter value={guests} onChange={setGuests} />
+              <GuestCounter isOpen={showGuestPicker} value={guests} onChange={setGuests} />
             </div>
           )}
         </div>

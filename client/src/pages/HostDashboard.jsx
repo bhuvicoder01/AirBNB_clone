@@ -38,12 +38,13 @@ const HostDashboard = () => {
          if(user?.role!=='host'){
       navigate('/')
     }
-        const propertiesResponse = await propertyAPI.getAll({ hostId: user?._id });
+        const propertiesResponse = await propertyAPI.getHostProperties({ hostId: user?._id });
         setHostProperties(propertiesResponse.data);
 
         // Fetch bookings for the host's properties
         const bookingsResponse = await bookingAPI.getAllBookingsForHostProperties(user?._id);
         setHostBookings(bookingsResponse.data.bookings);
+        // console.log(hostBookings)
 
         // Calculate earnings
         const calculateEarnings = () => {

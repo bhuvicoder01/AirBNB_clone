@@ -53,11 +53,11 @@ const UserMenu = () => {
           {isAuthenticated ? (
             <>
               <div className="p-3 border-bottom">
-                <div className="fw-semibold">{user.name}</div>
-                <small className="text-muted">{user.email}</small>
+                <div className="fw-semibold">{user.firstName} {user.lastName}😎</div>
+                {/* <small className="text-muted">{user.email}</small> */}
               </div>
 
-              <div className="py-2">
+              {user.role!== 'host' && <><div className="py-2">
                 <Link
                   to="/bookings"
                   className="dropdown-item px-3 py-2 d-block text-decoration-none text-dark"
@@ -74,7 +74,7 @@ const UserMenu = () => {
                   <i className="bi bi-heart me-2"></i>
                   Wishlists
                 </Link>
-                {user.role === 'host' && (
+                {/* {user.role === 'host' && (
                   <Link
                     to="/host/dashboard"
                     className="dropdown-item px-3 py-2 d-block text-decoration-none text-dark"
@@ -83,10 +83,12 @@ const UserMenu = () => {
                     <i className="bi bi-house-heart me-2"></i>
                     Host Dashboard
                   </Link>
-                )}
+                )} */}
               </div>
-
               <hr className="my-2" />
+              </>
+              }
+
 
               <div className="py-2">
                 <Link

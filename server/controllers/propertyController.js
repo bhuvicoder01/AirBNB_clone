@@ -178,10 +178,12 @@ class propertyController {
     // Host-specific endpoints
     static getHostProperties = async (req, res) => {
         try {
-            const hostId = req.params.hostId || req.user.id;
-            const properties = await propertyModel.find({ hostId }).sort({ createdAt: -1 });
+            const hostId = req.query.hostId;
+            console.log(hostId)
+            const properties = await propertyModel.find({ hostId:hostId }).sort({ createdAt: -1 });
             return res.json(properties);
         } catch (error) {
+            console.error(error)
             return res.status(500).json({ error: 'Failed to fetch host properties' });
         }
     }

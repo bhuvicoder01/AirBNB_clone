@@ -63,7 +63,7 @@ class bookingController {
 
     static getAllBookingsForHostProperties=async (req,res) => {
         const id=req.params.id
-        console.log(id)
+        // console.log(id)
 
         const bookings=await bookingModel.find({hostId:id})
         

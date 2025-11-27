@@ -25,6 +25,7 @@ export const AuthProvider = ({ children }) => {
       setUser(JSON.parse(storedUser));
       setIsAuthenticated(true);
     }
+    
     setLoading(false);
     checkAuth();
     

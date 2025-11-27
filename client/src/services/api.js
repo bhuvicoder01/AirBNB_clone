@@ -61,7 +61,7 @@ export const propertyAPI = {
   search: (filters) => api.get('/properties/search', { params: filters }),
 
   // Host property endpoints
-  getHostProperties: () => api.get('/properties/host/properties'),
+  getHostProperties: (params) => api.get('/properties/host/properties', { params }),
   getPropertiesByHostId: (hostId) => api.get(`/properties/host/${hostId}/properties`),
   create: (formData) => api.post('/properties/create', formData, {
     headers: {
