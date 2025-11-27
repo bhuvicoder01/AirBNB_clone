@@ -67,7 +67,7 @@ class bookingController {
 
         const bookings=await bookingModel.find({hostId:id})
         
-        console.log(bookings)
+        // console.log(bookings)
 
         res.json({bookings:bookings,message:'success'})
         

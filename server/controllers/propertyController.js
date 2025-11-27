@@ -141,7 +141,7 @@ class propertyController {
     static getHostProperties = async (req, res) => {
         try {
             const hostId = req.query.hostId;
-            console.log(hostId)
+            // console.log(hostId)
             const properties = await propertyModel.find({ hostId:hostId }).sort({ createdAt: -1 });
             return res.json(properties);
         } catch (error) {
