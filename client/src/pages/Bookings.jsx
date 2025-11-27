@@ -66,7 +66,7 @@ const Bookings = () => {
                   {t('view')} Property
                 </Button>
               </Link>
-              {(booking?.status === 'confirmed'||booking?.status==='pending')&&booking?.payment?.status==='pending' && new Date(booking.checkIn).getDate >= new Date().getDate && (
+              {(booking?.status === 'confirmed'||booking?.status==='pending')&&booking?.payment?.status==='pending' && new Date(booking.checkIn) >= new Date() && (
                 <Button 
                   variant="success" 
                   size="sm"
@@ -75,7 +75,7 @@ const Bookings = () => {
                   {t('Pay')} to Confirm
                 </Button>
               )}
-              {(booking?.status === 'confirmed'|| booking?.status==='pending') && new Date(booking?.checkIn).getDate >= new Date().getDate && (
+              {(booking?.status === 'confirmed'|| booking?.status==='pending') && new Date(booking?.checkIn) >= new Date() && (
                 <Button 
                   variant="warning" 
                   size="sm"
