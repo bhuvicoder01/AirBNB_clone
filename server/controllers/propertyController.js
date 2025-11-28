@@ -50,6 +50,10 @@ class propertyController {
     }
 
     static addReview = async (req, res) => {
+        const id=req.params.id
+        res.json({id,message:"yet to implement the logic"})
+    }
+
 
     static create = async (req, res) => {
         let compressedFiles = [];
