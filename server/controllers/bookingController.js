@@ -60,6 +60,14 @@ class bookingController {
             message:result
         })
     }
+    static confirm=async (req,res) => {
+        const id=req.params.id
+        const result=await bookingModel.findByIdAndUpdate(id,{status:'confirmed'})
+
+        return res.json({
+            message:result
+        })
+    }
 
     static getAllBookingsForHostProperties=async (req,res) => {
         const id=req.params.id

@@ -22,6 +22,7 @@ import NewListing from './components/host/NewListing';
 import EditHostListing from './components/host/EditHostListing';
 import PaymentInterface from './pages/PaymentInterface';
 import PaymentPage from './pages/Payment';
+import PropertyReviewForm from './components/property/PropertyReviewForm';
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
                   <Route path="/" element={<Home />} />
                   <Route path="/search" element={<SearchResults />} />
                   <Route path="/property/:id" element={<PropertyDetailsPage />} />
+                  <Route path="/property/:id/review" element={<PropertyReviewForm />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/register" element={<Register />} />
                   <Route path="/dashboard" element={<Dashboard />} />

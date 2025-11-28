@@ -49,6 +49,8 @@ class propertyController {
         }
     }
 
+    static addReview = async (req, res) => {
+
     static create = async (req, res) => {
         let compressedFiles = [];
         try {

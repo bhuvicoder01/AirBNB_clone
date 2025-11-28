@@ -66,7 +66,7 @@ const Bookings = () => {
                   {t('view')} Property
                 </Button>
               </Link>
-              {(booking?.status === 'confirmed'||booking?.status==='pending')&&booking?.payment?.status==='pending' && new Date(booking.checkIn) >= new Date() && (
+              {booking?.status==='pending'&&booking?.payment?.status==='pending' && new Date(booking.checkIn) >= new Date() && (
                 <Button 
                   variant="success" 
                   size="sm"
@@ -85,7 +85,10 @@ const Bookings = () => {
                 </Button>
               )}
               {booking.status === 'completed' && (
-                <Button variant="secondary" size="sm">
+                <Button variant="secondary" size="sm"
+                  onClick={() => navigate(`/property/${booking.propertyId}/review`)}
+                    
+                >
                   Write Review
                 </Button>
               )}

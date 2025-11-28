@@ -58,7 +58,7 @@ const BookingWidget = ({ property }) => {
         totalPrice: pricing.total,
         userId: user._id // TODO: Get from auth context
       });
-      console.log(bookingData)
+      // console.log(bookingData)
       if(bookingData){
         navigate(`/payment/booking/${bookingData._id}`)
       }

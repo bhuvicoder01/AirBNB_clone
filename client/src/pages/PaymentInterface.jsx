@@ -241,12 +241,12 @@ console.log('im here')
               </div>
               <div className="summary-item">
                 <span>{t('pricePerNight')}:</span>
-                <span>${booking.pricePerNight || 0}</span>
+                <span>₹{booking.pricePerNight || 0}</span>
               </div>
               <div className="summary-divider"></div>
               <div className="summary-item total">
                 <span>{t('totalAmount')}:</span>
-                <span>${booking.totalPrice || 0}</span>
+                <span>₹{booking.totalPrice || 0}</span>
               </div>
             </div>
           ) : (
@@ -263,7 +263,7 @@ console.log('im here')
               <div className="success-icon">✓</div>
               <h3>Payment Successful!</h3>
               <p>Transaction ID: <strong>{paymentData.transactionId}</strong></p>
-              <p>Amount: <strong>${paymentData.amount}</strong></p>
+              <p>Amount: <strong>₹{paymentData.amount}</strong></p>
               <p>Date: <strong>{new Date(paymentData.createdAt).toLocaleString()}</strong></p>
               <Button 
                 label="Make Another Payment" 
@@ -277,7 +277,7 @@ console.log('im here')
               <div className="success-icon">✓</div>
               <h3>Booking already paid!</h3>
               <p>Transaction ID: <strong>{booking?.payment?.transactionId}</strong></p>
-              <p>Amount: <strong>${booking?.totalPrice}</strong></p>
+              <p>Amount: <strong>₹{booking?.totalPrice}</strong></p>
               <p>Date: <strong>{new Date(booking?.payment?.createdAt).toLocaleString()}</strong></p>
               <Button
                 label="Make another payment"
@@ -389,7 +389,7 @@ console.log('im here')
                 ) : (
                   <>
                     <Button
-                      label={`Pay $${booking?.totalPrice || 0}`}
+                      label={`Pay ₹${booking?.totalPrice || 0}`}
                       type="submit"
                       onClick={handleSubmit}
                       disabled={!booking}

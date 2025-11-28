@@ -9,6 +9,7 @@ const router = express.Router();
 router.get('/', propertyController.getAll);
 router.get('/search', propertyController.searchProperties);
 router.get('/:id', propertyController.getById);
+router.post('/:id/review', propertyController.addReview);
 
 // Host routes (protected)
 // router.use(auth); // Apply auth middleware to all routes below
