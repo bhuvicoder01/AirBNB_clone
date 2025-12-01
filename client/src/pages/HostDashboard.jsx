@@ -106,7 +106,7 @@ const HostDashboard = () => {
         await propertyAPI.toggleStatus(propertyId);
         setShowToast(true);
         // Refresh properties
-        const response = await propertyAPI.getAll({ hostId: user?.id });
+        const response = await propertyAPI.getHostProperties({ hostId: user?._id });
         setHostProperties(response.data);
       }
     } catch (err) {
@@ -130,6 +130,10 @@ const HostDashboard = () => {
       setError('Failed to update booking status. Please try again.');
       setShowToast(true);
     }
+  };
+
+  const countBookingForProperty = (propertyId) => {
+    return hostBookings.filter(booking => booking.propertyId === propertyId).length;
   };
 
   if (loading) {
@@ -357,13 +361,26 @@ const HostDashboard = () => {
                   </Button>
                   <Button 
                     size="sm" 
-                    variant="warning" 
+                    variant={`${property.isActive ? 'bg-danger' : 'success'}`} 
                     fullWidth
                     onClick={() => handlePropertyAction(property._id, 'disable')}
+                    // className={`btn ${property.isActive ? 'bg-danger' : 'bg-success'}`}
                   >
                     {property.isActive ? 'Disable' : 'Enable'}
                   </Button>
                 </div>
+                {/* <span className={`badge mt-3 ${property.isActive ? 'bg-success' : 'bg-secondary'}`}>
+                  {property.isActive ? 'Active' : 'Disabled'}
+                </span> */}
+                <span className={`badge mt-3 bg-info`}>
+                  {countBookingForProperty(property._id)>1?`${countBookingForProperty(property._id)} Bookings`:`${countBookingForProperty(property._id)} Booking`} 
+                </span>
+                <span className={`badge mt-3 position-absolute top-0 end-0 ${property.isActive ? 'bg-success' : 'bg-secondary'}`}>
+                  {property.isActive ? 'Active' : 'Disabled'}
+                </span>
+                <span className={`badge mt-3 mx-2 text-decoration-none text-dark  ${countBookingForProperty(property._id)>0?'bg-warning':'bg-secondary'}`}>
+                  {countBookingForProperty(property._id)>0?<Link className=' text-decoration-none text-dark' to={`/property/${property._id}`}>Reviews</Link>:null}
+                </span>
               </Card>
             </div>
           ))}

@@ -8,6 +8,7 @@ const userRoutes=require('./routes/user')
 const propertyRoutes=require('./routes/property')
 const bookingRoutes=require('./routes/booking')
 const paymentRoutes=require('./routes/payment')
+const reviewRoutes=require('./routes/review')
 const cors=require('cors')
 const fileUpload=require('express-fileupload')
 
@@ -47,6 +48,7 @@ app.use('/api/users',userRoutes)
 app.use('/api/properties',propertyRoutes)
 app.use('/api/bookings',bookingRoutes)
 app.use('/api/payments',paymentRoutes)
+app.use('/api/reviews',reviewRoutes)
 
 
 app.use('/api',async (req,res) => {

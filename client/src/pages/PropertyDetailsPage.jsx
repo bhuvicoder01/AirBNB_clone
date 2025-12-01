@@ -95,7 +95,7 @@ const PropertyDetailsPage = () => {
               <i className="bi bi-star-fill me-2"></i>
               {property.rating.overall} · {property.reviews_count} reviews
             </h5>
-            <ReviewsList propertyId={property.id} />
+            <ReviewsList propertyId={property._id} />
           </div>
         </div>
 

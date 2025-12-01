@@ -5,20 +5,36 @@ import { useLanguage } from '../../contexts/LanguageContext';
 import SearchBar from '../search/SearchBar';
 import UserMenu from '../user/UserMenu';
 import LanguageSelector from '../common/LanguageSelector';
+import Toast from '../common/Toast';
+import { useEffect } from 'react';
 
 const Navbar = () => {
   const { user, isAuthenticated } = useAuth();
   const { t } = useLanguage();
   const navigate = useNavigate();
   const [showSearchBar, setShowSearchBar] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState(t('please_login_to_continue'));
+
+  useEffect(() => {
+    if (!isAuthenticated&& window.location.pathname == '/') {
+      setShowToast(true);
+    setToastMessage(t('please_login_to_experience_full_features'));
+      const timer = setTimeout(() => {
+        setShowToast(false);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [isAuthenticated, navigate]);
 
   return (<>
     <nav className="navbar navbar-expand-lg navbar-light  sticky-top"style={{backgroundColor:'transparent'}}>
       <div className="container-fluid  py-2 px-0 "style={{backgroundColor:'rgba(255, 255, 255, 0.82)',borderRadius:'20px',marginInline:'2%'}}>
         {/* Logo */}
         <Link to="/" className="navbar-brand d-flex align-items-center">
-          <i className="bi bi-house-heart-fill text-danger fs-3 me-0"></i>
-          <span className="fw-bold airbnb-logo">Wandora</span>
+          {/* <i className="bi bi-house-heart-fill text-danger fs-3 me-0"></i> */}
+          {/* <span className="fw-bold airbnb-logo">Wandora</span> */}
+          <img src="/logo.png" alt="Wandora Logo" />
         </Link>
 
         {/* Search Bar - Desktop */}
@@ -38,7 +54,7 @@ const Navbar = () => {
             to="/host/dashboard" 
             className="text-decoration-none bi bi-speedometer px-1 text-dark fw-bold d-none d-lg-block host-link"
           >
-            Dashboard
+          <span className='px-1'>Dashboard</span>
           </Link>)}
 {/* Mobile Search Button */}
         <button 
@@ -64,6 +80,7 @@ const Navbar = () => {
         </div>
       )}
     </nav>
+    <Toast show={showToast} message={toastMessage} type='error' position='bottom-center' onClose={()=>setShowToast(false)}  />
     </>
   );
 };

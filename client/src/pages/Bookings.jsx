@@ -7,12 +7,50 @@ import Card from '../components/common/Card';
 import Button from '../components/common/Button';
 import Loading from '../components/common/Loading';
 import { useProperty } from '../contexts/PropertyContext';
+import Modal from '../components/common/Modal';
+import Toast from '../components/common/Toast';
+import { reviewAPI } from '../services/api';
 
 const Bookings = () => {
-  const { user } = useAuth();
+  const { user,isAuthenticated } = useAuth();
   const { t } = useLanguage();
   const{properties}=useProperty();
   const {isLoading, userBookings, cancelBooking } = useBooking();
+  const [showToast,setShowToast]=useState(false);
+  const [toastMessage,setToastMessage]=useState('');
+  const [showReviewModal,setShowReviewModal]=useState(false);
+  const [propertyId,setPropertyId]=useState('');
+
+  const postReview=async(e)=>{
+    e.preventDefault();
+    setShowReviewModal(false);
+    setShowToast(true);
+    setToastMessage('Submitting your review...');
+    try {
+     if(!isAuthenticated){
+            setShowToast(true);
+            setToastMessage('Please login to submit a review.');
+            return;
+          }
+          const reviewData={
+          propertyId:propertyId,
+          userId: user._id,
+          rating:rating?.value,
+          comment:comment?.value,
+          // hostResponse:review.hostResponse.value
+        }
+        console.log(reviewData);
+          setShowToast(true);
+        setToastMessage('Submitting your review...');
+          const response = await reviewAPI.create(reviewData);
+          setShowToast(true);
+          setToastMessage('Review submitted successfully!');
+    } catch (error) {
+      setShowToast(true);
+      setToastMessage('Error submitting your review.');
+      console.error('Error submitting review:', error);
+    }
+  }
   const navigate=useNavigate()
   
   // console.log(user?._id)
@@ -86,7 +124,9 @@ const Bookings = () => {
               )}
               {booking.status === 'completed' && (
                 <Button variant="secondary" size="sm"
-                  onClick={() => navigate(`/property/${booking.propertyId}/review`)}
+                  onClick={() => {setShowReviewModal(true) 
+                    setPropertyId(booking.propertyId)
+                  }}
                     
                 >
                   Write Review
@@ -152,7 +192,36 @@ const Bookings = () => {
         </div>
       )}
     </div>
-}</> );
+}
+   {/*Write a Review Modal */}
+      <Modal
+        title="Write a Review"
+        show={showReviewModal}
+        onClose={()=>setShowReviewModal(false)}
+      >
+        {/* Review Form */} 
+
+       
+          <form onSubmit={postReview}>
+             <div className="mb-3">
+          <label htmlFor="rating" className="form-label">Rating</label>
+          <select className="form-select" id="rating">
+            <option value="5">5 - Excellent</option>
+            <option value="4">4 - Very Good</option>
+            <option value="3">3 - Good</option>
+            <option value="2">2 - Fair</option>
+            <option value="1">1 - Poor</option>
+          </select>
+        </div>
+        <div className="mb-3">
+          <label htmlFor="comment" className="form-label">Comment</label>
+          <textarea className="form-control" id="comment" rows="4"></textarea>
+        </div>
+        <Button onClick={postReview} type='submit' variant="success">Submit Review</Button>
+      </form>
+      </Modal>
+      <Toast show={showToast} message={toastMessage} type='primary' position='bottom-center' onClose={()=>setShowToast(false)}  />
+</> );
 };
 
 export default Bookings;

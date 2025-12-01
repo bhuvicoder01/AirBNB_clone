@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import Modal from '../common/Modal';
+import { reviewAPI } from '../../services/api';
+import Button from '../common/Button';
+import { useAuth } from '../../contexts/AuthContext';
+import Toast from '../common/Toast';
 
 // Mock reviews data
 const mockReviews = [
@@ -32,10 +36,94 @@ const mockReviews = [
   }
 ];
 
-const ReviewsList = ({ propertyId, limit = 6 }) => {
+const ReviewsList = ({ propertyId, limit = 2 }) => {
+  const {user,isAuthenticated} = useAuth();
   const [showAll, setShowAll] = useState(false);
-  const reviews = mockReviews; // TODO: Fetch from API based on propertyId
-  const displayReviews = showAll ? reviews : reviews.slice(0, limit);
+  const [reviews,setReviews] = useState([]); 
+  const displayReviews = showAll ? reviews : reviews?.slice(0, limit);
+  const [reviewAnalytics,setReviewAnalytics] = useState(null); // TODO: Calculate actual analytics
+  const [showReviewModal,setShowReviewModal]=useState(false);
+  const [showToast,setShowToast]=useState(false);
+  const [toastMessage,setToastMessage]=useState('');
+  const [review,setReview]=useState({});
+
+  const getReviews=async()=>{
+    try {
+      const response = await reviewAPI.getByProperty(propertyId);
+      setReviews(response.data);
+      // console.log(response.data);
+    } catch (error) {
+      console.error('Error fetching review analytics:', error);
+    }
+  }
+
+  const postReview=async(e)=>{
+    e.preventDefault();
+    setShowReviewModal(false);
+    try {
+      if(!isAuthenticated){
+        setShowToast(true);
+        setToastMessage('Please login to submit a review.');
+        return;
+      }
+      const reviewData={
+      propertyId:propertyId,
+      userId: user._id,
+      rating:rating?.value,
+      comment:comment?.value,
+      // hostResponse:review.hostResponse.value
+    }
+      setShowToast(true);
+    setToastMessage('Submitting your review...');
+      const response = await reviewAPI.create(reviewData);
+      setReviews(response.data.reviews);
+      getReviews();
+      setShowToast(true);
+      setToastMessage('Review submitted successfully!');
+    } catch (error) {
+      setShowToast(true);
+      setToastMessage('Error submitting your review.');
+      console.error('Error adding review:', error);
+    }
+  }
+
+  const postResponse=async(e)=>{
+    e.preventDefault();
+    setShowReviewModal(false);
+    try {
+      const responseData={
+      hostResponse:hostResponse?.value
+    }
+      setShowToast(true);
+    setToastMessage('Submitting your response...');
+      const response = await reviewAPI.update(review._id,user._id,responseData);
+      setReviews(response.data.reviews);
+      getReviews();
+      setShowToast(true);
+      setToastMessage('Response submitted successfully!');
+    } catch (error) {
+      setShowToast(true);
+      setToastMessage('Error submitting your response.');
+      console.error('Error adding review:', error);
+    }
+  }
+
+  const deleteResponse=async()=>{
+    try {
+      setShowToast(true); 
+    setToastMessage('Deleting your response...');
+      const response = await reviewAPI.deleteHostResponse(review._id,user._id);
+      getReviews();
+    } catch (error) {
+      setShowToast(true);
+      setToastMessage('Error deleting your response.');
+      console.error('Error deleting review response:', error);
+    }
+  }
+
+  React.useEffect(() => {
+    getReviews();
+  }, [propertyId]);
 
   const RatingBar = ({ label, value }) => (
     <div className="mb-2">
@@ -54,9 +142,11 @@ const ReviewsList = ({ propertyId, limit = 6 }) => {
 
   return (
     <>
-      <div className="reviews-list">
+    <Button variant="secondary" onClick={()=>setShowReviewModal(true)}>Write a Review</Button>
+    {reviews?.length===0?null:
+      <div className="reviews-list mt-4">
         {/* Rating Breakdown */}
-        <div className="row mb-5">
+        {reviewAnalytics && <div className="row mb-5">
           <div className="col-md-6">
             <RatingBar label="Cleanliness" value={4.9} />
             <RatingBar label="Accuracy" value={4.8} />
@@ -67,12 +157,12 @@ const ReviewsList = ({ propertyId, limit = 6 }) => {
             <RatingBar label="Location" value={4.7} />
             <RatingBar label="Value" value={4.8} />
           </div>
-        </div>
+        </div>}
 
         {/* Reviews */}
         <div className="row g-4">
-          {displayReviews.map((review) => (
-            <div key={review.id} className="col-md-6">
+          {displayReviews?.map((review) => (
+            <div key={review._id} className="col-md-6">
               <div className="review-item">
                 {/* User Info */}
                 <div className="d-flex align-items-center mb-3">
@@ -84,7 +174,7 @@ const ReviewsList = ({ propertyId, limit = 6 }) => {
                   />
                   <div>
                     <h6 className="mb-0">{review.userName}</h6>
-                    <small className="text-muted">{review.date}</small>
+                    <small className="text-muted">{new Date(review.createdAt).toLocaleDateString()}</small>
                   </div>
                 </div>
 
@@ -103,11 +193,29 @@ const ReviewsList = ({ propertyId, limit = 6 }) => {
                 {/* Comment */}
                 <p className="text-muted mb-2">{review.comment}</p>
 
+                {/*Button for host to respond to review */}
+                {user?.role==='host' && !review.hostResponse && (
+                  <Button 
+                  className='btn-secondary  btn-outline-secondary text-decoration-none'
+                    variant="link"
+                    onClick={() => {
+                      setReview(review);
+                      setShowReviewModal(true);
+                    }}
+                    
+                  >
+                    Respond to review
+                  </Button>
+                )}
+
                 {/* Host Response */}
                 {review.hostResponse && (
                   <div className="ms-4 mt-3 p-3 bg-light rounded">
                     <p className="small fw-semibold mb-1">Response from host:</p>
                     <p className="small text-muted mb-0">{review.hostResponse}</p>
+                    <i className="bi bi-dash-circle-fill text-muted" onClick={()=>{
+                      setReview(review);
+                      deleteResponse()}}></i>
                   </div>
                 )}
               </div>
@@ -116,7 +224,7 @@ const ReviewsList = ({ propertyId, limit = 6 }) => {
         </div>
 
         {/* Show More Button */}
-        {reviews.length > limit && !showAll && (
+        {reviews?.length > limit && !showAll && (
           <button
             className="btn btn-outline-dark mt-4"
             onClick={() => setShowAll(true)}
@@ -125,7 +233,46 @@ const ReviewsList = ({ propertyId, limit = 6 }) => {
           </button>
         )}
       </div>
-    </>
+      }{/*
+      Write a Review Modal */}
+      <Modal
+        title={user?.role === 'host' ? "Write response" : "Write a Review"}
+        show={showReviewModal}
+        onClose={()=>setShowReviewModal(false)}
+      >
+        {/* Review Form */} 
+
+       
+          {user?.role==='host'?
+          <form onSubmit={postResponse}>
+            
+        <div className="mb-3">
+          <label htmlFor="hostResponse" className="form-label">Message</label>
+          <textarea className="form-control" id="hostResponse" rows="4"></textarea>
+        </div>
+        <Button onClick={postResponse} type='submit' variant="success">Submit Response</Button>
+      </form>
+      :
+      <form onSubmit={postReview}>
+             <div className="mb-3">
+          <label htmlFor="rating" className="form-label">Rating</label>
+          <select className="form-select" id="rating">
+            <option value="5">5 - Excellent</option>
+            <option value="4">4 - Very Good</option>
+            <option value="3">3 - Good</option>
+            <option value="2">2 - Fair</option>
+            <option value="1">1 - Poor</option>
+          </select>
+        </div>
+        <div className="mb-3">
+          <label htmlFor="comment" className="form-label">Comment</label>
+          <textarea className="form-control" id="comment" rows="4"></textarea>
+        </div>
+        <Button onClick={postReview} type='submit' variant="success">Submit Review</Button>
+      </form>}
+      </Modal>
+      <Toast show={showToast} message={toastMessage} type='primary' position='bottom-center' onClose={()=>setShowToast(false)}  />
+  </>
   );
 };
 

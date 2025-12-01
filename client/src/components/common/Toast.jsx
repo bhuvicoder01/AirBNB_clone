@@ -46,6 +46,7 @@ const Toast = ({
       'top-left': 'top-0 start-0',
       'bottom-right': 'bottom-0 end-0',
       'bottom-left': 'bottom-0 start-0',
+      'bottom-center': 'bottom-0 start-50 translate-middle-x',
       'top-center': 'top-0 start-50 translate-middle-x'
     };
     return positions[position] || positions['top-right'];

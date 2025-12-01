@@ -92,8 +92,13 @@ export const bookingAPI = {
 export const reviewAPI = {
   create: (reviewData) => api.post('/reviews', reviewData),
   getByProperty: (propertyId) => api.get(`/reviews/property/${propertyId}`),
-  update: (id, reviewData) => api.put(`/reviews/${id}`, reviewData),
-  delete: (id) => api.delete(`/reviews/${id}`)
+  delete: (id) => api.delete(`/reviews/${id}`),
+
+  //host respond to review
+  update: (id,hostId, reviewData) => api.put(`/reviews/${id}/host/${hostId}/respond`, reviewData),
+  deleteHostResponse: (id,hostId) => api.put(`/reviews/${id}/host/${hostId}/response/delete`)
+
+
 };
 
 // Users
