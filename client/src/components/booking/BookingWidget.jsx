@@ -7,6 +7,7 @@ import DateRangePicker from '../search/DateRangePicker';
 import PriceBreakdown from './PriceBreakdown';
 import { calculateNights } from '../../utils/dateUtils';
 import { calculateTotalPrice } from '../../utils/priceCalculator';
+import Toast from '../common/Toast';
 
 const BookingWidget = ({ property }) => {
   const navigate = useNavigate();
@@ -18,6 +19,9 @@ const BookingWidget = ({ property }) => {
   const [guests, setGuests] = useState(1);
   const [showCheckInModal, setShowCheckInModal] = useState(false);
   const [showCheckOutModal, setShowCheckOutModal] = useState(false);
+  const [showToast,setShowToast]=useState(false);
+  const [toastMessage,setToastMessage]=useState('N/A');  
+  const [toastType,setToastType]=useState('primary');
 
 
   const nights = checkIn && checkOut ? calculateNights(checkIn, checkOut) : 0;
@@ -26,6 +30,12 @@ const BookingWidget = ({ property }) => {
   const handleReserve = async () => {
     if (!isAuthenticated) {
       navigate('/login');
+      return;
+    }
+    if(user.role==='host'){
+      setShowToast(true);
+      setToastMessage('Hosts cannot make bookings. Please use a guest account to book properties.');
+      setToastType('error');
       return;
     }
 
@@ -72,6 +82,7 @@ const BookingWidget = ({ property }) => {
   };
 
   return (
+    <>
     <div className="card shadow-lg border-0">
       <div className="card-body p-4">
         {/* Price */}
@@ -177,6 +188,8 @@ const BookingWidget = ({ property }) => {
         )}
       </div>
     </div>
+    <Toast show={showToast} message={toastMessage} type={toastType} position='bottom-center' onClose={()=>setShowToast(false)}  />
+    </>
   );
 };
 

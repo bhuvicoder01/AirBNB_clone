@@ -8,6 +8,8 @@ import Loading from '../components/common/Loading';
 import Toast from '../components/common/Toast';
 import { propertyAPI, bookingAPI } from '../services/api';
 import { useLanguage } from '../contexts/LanguageContext';
+import Modal from '../components/common/Modal';
+import ReviewsList from '../components/property/ReviewsList';
 
 const HostDashboard = () => {
   const navigate = useNavigate();
@@ -16,6 +18,9 @@ const HostDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('N/A');
+  const [toastType, setToastType] = useState('primary');
+  const [showGuestReviewModal, setShowGuestReviewModal] = useState(false);
   const {t}=useLanguage()
   
   // State for host data
@@ -104,6 +109,8 @@ const HostDashboard = () => {
         navigate(`/host/edit-listing/${propertyId}`);
       } else if (action === 'disable') {
         await propertyAPI.toggleStatus(propertyId);
+        setToastMessage('Property status updated successfully.');
+        setToastType('success');
         setShowToast(true);
         // Refresh properties
         const response = await propertyAPI.getHostProperties({ hostId: user?._id });
@@ -129,6 +136,8 @@ const HostDashboard = () => {
     } catch (err) {
       setError('Failed to update booking status. Please try again.');
       setShowToast(true);
+      setToastMessage(error);
+      console.log(err);
     }
   };
 
@@ -141,6 +150,7 @@ const HostDashboard = () => {
   }
 
   return (
+    <>
     <div className="container mt-4">
       {showToast && (
         <Toast 
@@ -257,7 +267,7 @@ const HostDashboard = () => {
           {/* Recent Bookings */}
           <Card title="Recent Bookings" shadow className="mb-4">
             <div className="table-responsive">
-              <table className="table">
+              <table className="custom-table">
                 <thead>
                   <tr>
                     <th>Guest</th>
@@ -272,7 +282,7 @@ const HostDashboard = () => {
                 <tbody>
                   {hostBookings.slice(0, 5).map(booking => (
                     <tr key={booking._id}>
-                      <td>{booking.userId}</td>
+                      <td>{(booking.userId).slice(-7)}</td>
                       <td>{booking.propertyTitle}</td>
                       <td>{new Date(booking.checkIn).toLocaleDateString()}</td>
                       <td>{new Date(booking.checkOut).toLocaleDateString()}</td>
@@ -379,9 +389,17 @@ const HostDashboard = () => {
                   {property.isActive ? 'Active' : 'Disabled'}
                 </span>
                 <span className={`badge mt-3 mx-2 text-decoration-none text-dark  ${countBookingForProperty(property._id)>0?'bg-warning':'bg-secondary'}`}>
-                  {countBookingForProperty(property._id)>0?<Link className=' text-decoration-none text-dark' to={`/property/${property._id}`}>Reviews</Link>:null}
+                  {countBookingForProperty(property._id)>0?<Link className=' text-decoration-none text-dark' onClick={()=>setShowGuestReviewModal(true)}>Reviews</Link>:null}
                 </span>
               </Card>
+               <Modal
+        title="Guest Reviews"
+        show={showGuestReviewModal}
+        onClose={()=>setShowGuestReviewModal(false)}
+      >
+        {/* Reviews Content */}
+          <ReviewsList propertyId={property._id} />
+      </Modal>
             </div>
           ))}
           {hostProperties.length === 0 && (
@@ -405,7 +423,7 @@ const HostDashboard = () => {
       {activeTab === 'bookings' && (
         <Card shadow>
           <div className="table-responsive">
-            <table className="table">
+            <table className="custom-table">
               <thead>
                 <tr>
                   <th>Guest</th>
@@ -420,7 +438,7 @@ const HostDashboard = () => {
               <tbody>
                 {hostBookings.map(booking => (
                   <tr key={booking._id}>
-                    <td>{booking.userId}</td>
+                    <td>{(booking?.userId).slice(-7)}</td>
                     <td>{booking.propertyTitle}</td>
                     <td>{new Date(booking.checkIn).toLocaleDateString()}</td>
                     <td>{new Date(booking.checkOut).toLocaleDateString()}</td>
@@ -534,7 +552,7 @@ const HostDashboard = () => {
                       .map(booking => (
                         <tr key={booking._id}>
                           <td>{new Date(booking.checkIn).toLocaleDateString()}</td>
-                          <td>{booking.userId}</td>
+                          <td>{(booking.userId).slice(-7)}</td>
                           <td>{booking.propertyTitle}</td>
                           <td>
                             <span className={`badge ${booking.status==='confirmed'?'bg-success':'bg-danger'}`} >{booking.status}</span>
@@ -557,6 +575,9 @@ const HostDashboard = () => {
         </div>
       )}
     </div>
+    <Toast show={showToast} message={toastMessage} type={toastType} position='bottom-center' onClose={()=>setShowToast(false)}  />
+   
+    </>
   );
 };
 

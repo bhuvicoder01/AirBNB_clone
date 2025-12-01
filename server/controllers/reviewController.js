@@ -14,8 +14,13 @@ class ReviewController {
             }
             
 
+            const property = await propertyModel.findById(propertyId);
+            if (!property) {
+                return res.status(404).json({ message: 'Property not found' });
+            }
             const reviewData = reviews.map(review => ({
                 _id: review._id,
+                hostId: review.propertyId ? property.hostId : null,
                 userAvatar: review.userAvatar,
                 userName: review.userName,
                 rating: review.rating,
@@ -36,6 +41,10 @@ class ReviewController {
             const booking=await bookingModel.findOne({propertyId,userId,status:'confirmed'});
             if(!booking){
                 return  res.status(400).json({ message: 'User has not completed a booking for this property' });
+            }
+            const reviewExists=await reviewModel.findOne({propertyId,userId});
+            if(reviewExists){
+                return  res.status(400).json({ message: 'User has already submitted a review for this property' });
             }
             
             const newReview = new reviewModel({ propertyId, userId, rating, comment });

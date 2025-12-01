@@ -45,6 +45,7 @@ const ReviewsList = ({ propertyId, limit = 2 }) => {
   const [showReviewModal,setShowReviewModal]=useState(false);
   const [showToast,setShowToast]=useState(false);
   const [toastMessage,setToastMessage]=useState('');
+  const [toastType,setToastType]=useState('primary');
   const [review,setReview]=useState({});
 
   const getReviews=async()=>{
@@ -82,8 +83,9 @@ const ReviewsList = ({ propertyId, limit = 2 }) => {
       setToastMessage('Review submitted successfully!');
     } catch (error) {
       setShowToast(true);
-      setToastMessage('Error submitting your review.');
-      console.error('Error adding review:', error);
+      setToastType('error');
+      setToastMessage(error.response.data.message || 'Error submitting your review.');
+      console.error('Error adding review:', error.response.data.message);
     }
   }
 
@@ -103,7 +105,8 @@ const ReviewsList = ({ propertyId, limit = 2 }) => {
       setToastMessage('Response submitted successfully!');
     } catch (error) {
       setShowToast(true);
-      setToastMessage('Error submitting your response.');
+      setToastType('error');
+      setToastMessage(error.response.data.message || 'Error submitting your response.');
       console.error('Error adding review:', error);
     }
   }
@@ -116,7 +119,8 @@ const ReviewsList = ({ propertyId, limit = 2 }) => {
       getReviews();
     } catch (error) {
       setShowToast(true);
-      setToastMessage('Error deleting your response.');
+      setToastType('error');
+      setToastMessage(error.response.data.message || 'Error deleting your response.');
       console.error('Error deleting review response:', error);
     }
   }
@@ -142,7 +146,7 @@ const ReviewsList = ({ propertyId, limit = 2 }) => {
 
   return (
     <>
-    <Button variant="secondary" onClick={()=>setShowReviewModal(true)}>Write a Review</Button>
+   {user?.role !== 'host' &&  <Button variant="secondary" onClick={()=>setShowReviewModal(true)}>Write a Review</Button>}
     {reviews?.length===0?null:
       <div className="reviews-list mt-4">
         {/* Rating Breakdown */}
@@ -213,9 +217,9 @@ const ReviewsList = ({ propertyId, limit = 2 }) => {
                   <div className="ms-4 mt-3 p-3 bg-light rounded">
                     <p className="small fw-semibold mb-1">Response from host:</p>
                     <p className="small text-muted mb-0">{review.hostResponse}</p>
-                    <i className="bi bi-dash-circle-fill text-muted" onClick={()=>{
+                   {user?.role === 'host' && review.hostId === user._id && <i className="bi bi-dash-circle-fill text-muted" onClick={()=>{
                       setReview(review);
-                      deleteResponse()}}></i>
+                      deleteResponse()}}></i>}
                   </div>
                 )}
               </div>
@@ -271,7 +275,7 @@ const ReviewsList = ({ propertyId, limit = 2 }) => {
         <Button onClick={postReview} type='submit' variant="success">Submit Review</Button>
       </form>}
       </Modal>
-      <Toast show={showToast} message={toastMessage} type='primary' position='bottom-center' onClose={()=>setShowToast(false)}  />
+      <Toast show={showToast} message={toastMessage} type={toastType} position='bottom-center' onClose={()=>setShowToast(false)}  />
   </>
   );
 };
