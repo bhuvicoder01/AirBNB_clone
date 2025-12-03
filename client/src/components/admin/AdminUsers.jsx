@@ -1,15 +1,25 @@
+import { useNavigate } from 'react-router-dom'
 import { use, useEffect, useState } from 'react'
 import React from 'react'
 import Loading from '../common/Loading'
 import { userAPI } from '../../services/api'
 import Input from '../common/Input'
+import { useAuth } from '../../contexts/AuthContext'
 
 function AdminUsers() {
+  const {user}=useAuth();
   const [users, setUsers] = useState([])
   const [loading, setLoading] = useState(true)
   const [sortOrder, setSortOrder] = useState({ name: 'asc', email: 'asc', role: 'asc' })
   const[filteredUsers,setFilteredUsers]=useState(users)
+  const navigate=useNavigate()
  
+  useEffect(()=>{
+    if(user?.role!='admin'){
+      navigate('/')
+    }
+
+  },)
 
   const fetchUsers=async()=>{
     try {
@@ -52,7 +62,7 @@ function AdminUsers() {
   }
   return (
     <>
-    <div className="container mt-5 ">
+    <div className="container mt-2 ">
       <h2 className="mb-2">Users</h2>
       <Input type='text' label='Search' placeholder='Search by name/email/role' onChange={filterBy}  />
       <table className="table custom-table table-striped">
