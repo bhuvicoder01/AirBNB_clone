@@ -5,7 +5,7 @@ import { useAuth } from "../../contexts/AuthContext";
 //side navbar for admin dashboard
 function AdminDashboardNavbar() {
     const [activeTab, setActiveTab] = useState(localStorage.getItem('adminActiveTab')||'dashboard');
-    const {user}=useAuth()
+    const {user,logout}=useAuth()
 
     function NavItem({ icon, text }) {
         const [windowSize,setWindowSize]=useState(window.innerWidth);
@@ -32,6 +32,14 @@ function AdminDashboardNavbar() {
                 {/* <i className="fas fa-user-shield"style={{fontSize:'2rem'}}/> */}
                 <img src={user?.avatar.url} alt="profile picture" className="profile-picture rounded-circle"style={{maxWidth:'40px'}} />
                 <span className="fas p-2">Admin <br/>dashboard</span>
+                <div className="admin-logout">
+                    <Link className="admin-logout-link" onClick={()=>{
+                        logout()
+
+                    }}>
+                        <i className="fas fa-sign-out-alt"></i>
+                    </Link>
+                </div>
             </div>
             <nav className="container admin-nav-container">
                 <ul className="admin-nav-items  gap-5">
@@ -41,7 +49,6 @@ function AdminDashboardNavbar() {
                     <NavItem icon="shopping-cart" text="properties"/>
                     <NavItem icon="shipping-fast" text="bookings"/>
                     <NavItem icon="cog" text="settings"  />
-                    
                     
                 </ul>
             </nav>
