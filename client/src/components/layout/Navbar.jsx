@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useLanguage } from '../../contexts/LanguageContext';
@@ -15,17 +15,18 @@ const Navbar = () => {
   const [showSearchBar, setShowSearchBar] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState(t('please_login_to_continue'));
+  const [firstTimeVisit, setFirstTimeVisit] = useState(localStorage.getItem('firstTimeVisit') === null ? true : false);
 
   useEffect(() => {
-    if (!isAuthenticated&& window.location.pathname == '/') {
+    if (firstTimeVisit && !isAuthenticated) {
       setShowToast(true);
-    setToastMessage(t('please_login_to_experience_full_features'));
-      const timer = setTimeout(() => {
-        setShowToast(false);
-      }, 3000);
-      return () => clearTimeout(timer);
+      setToastMessage(t(`Welcome👋! Please login to Explore all features.` ));
+      localStorage.setItem('firstTimeVisit', 'false');
+      setFirstTimeVisit(false);
     }
-  }, [isAuthenticated, navigate]);
+  }, [firstTimeVisit, isAuthenticated]);
+
+  
 
   return (<>
     <nav className="navbar navbar-expand-lg navbar-light  sticky-top"style={{backgroundColor:'transparent'}}>
@@ -80,7 +81,7 @@ const Navbar = () => {
         </div>
       )}
     </nav>
-    <Toast show={showToast} message={toastMessage} type='error' position='bottom-center' onClose={()=>setShowToast(false)}  />
+    <Toast show={showToast} message={toastMessage} duration={6000} position='bottom-center' onClose={()=>setShowToast(false)}  />
     </>
   );
 };

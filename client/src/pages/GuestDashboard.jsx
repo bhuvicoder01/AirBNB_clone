@@ -3,7 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useBooking } from '../contexts/BookingContext';
 import { Link } from 'react-router-dom';
 
-const Dashboard = () => {
+const GuestDashboard = () => {
   const { user } = useAuth();
   const { getUserBookings ,bookings} = useBooking();
   
@@ -70,4 +70,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default GuestDashboard;

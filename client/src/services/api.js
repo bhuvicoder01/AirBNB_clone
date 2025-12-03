@@ -16,7 +16,7 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     const user = localStorage.getItem('user');
-    if (user) {
+    if (user && !user==='null') {
       const { token } = JSON.parse(user);
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
@@ -103,7 +103,7 @@ export const reviewAPI = {
 
 // Users
 export const userAPI = {
-  getProfile: () => api.get('/users/profile'),
+  getProfile: (userId) => api.get(`/users/${userId}/profile`),
   getUsersWishList:(userId)=>api.get(`/users/${userId}/wishlist`),
   addToWishlist:(wishlistData)=>api.post('/users/wishlist',wishlistData),
   removeFromWishList:(propertyId,userId)=>api.delete(`/users/${userId}/wishlist/${propertyId}`),
@@ -112,7 +112,18 @@ export const userAPI = {
   }),
   uploadAvatar: (formData) => api.post('/users/avatar', formData, {
     headers: { 'Content-Type': 'multipart/form-data' }
-  })
+  }),
+
+  //for logged in user host apply
+  applyHost: (userId) => api.post(`/users/${userId}/apply-host`),
+
+
+  //admin apis
+  getAllUsers: () => api.get('users/admin/get-users'),
+  deleteUser: (userId) => api.delete(`/users/${userId}`),
+  updateUser: (userId, userData) => api.put(`/users/${userId}/profile`, userData)
+
+
 };
 
 // Payments

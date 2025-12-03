@@ -9,7 +9,7 @@ import Loading from '../components/common/Loading';
 
 const Login = () => {
   const navigate = useNavigate();
-  const {login,user,logout} = useAuth();
+  const {login,user,logout,isAuthenticated} = useAuth();
   const { t } = useLanguage();
   const [isLoading,setIsLoading]=useState(true)
 
@@ -19,7 +19,7 @@ const Login = () => {
       console.log('logging out')
       logout()
     }
-    if(localStorage.getItem('user')||user!==null){
+    if((localStorage.getItem('user')||user!==null) && isAuthenticated){
       // console.log(user)
       navigate('/')
     }
@@ -28,6 +28,7 @@ const Login = () => {
 
   const handleLogin = async (credentials) => {
     try {
+      console.log(credentials)
       const user=await login(credentials.email, credentials.password);
       if(user){
         if(user.role==='host'){

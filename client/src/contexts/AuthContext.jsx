@@ -18,6 +18,13 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const navigate=useNavigate();
 
+  const updatedUser=async()=>{
+    const response=await userAPI.getProfile(user?._id);
+    setUser(response.data);
+    localStorage.setItem('user', JSON.stringify(response.data));
+    return response.data;
+  }
+
   useEffect(() => {
     // Check if user is logged in (from localStorage)
     const storedUser = localStorage.getItem('user');
@@ -28,13 +35,21 @@ export const AuthProvider = ({ children }) => {
     
     setLoading(false);
     checkAuth();
+    // updatedUser()
     
   }, []);
 
   const checkAuth=async () => {
-    const id=(JSON.parse(localStorage.getItem('user')))?._id
+    if(!user?._id||!user){
+      setUser(null)
+      localStorage.setItem('user', null)
+      setIsAuthenticated(false);
+      return
+    }
+    const id=await ((JSON.parse(localStorage.getItem('user')))?._id || user?._id)
     const response=await authAPI.checkAuth(id);
      setUser(response.data.user);
+     localStorage.setItem('user', JSON.stringify(response.data.user))
       setIsAuthenticated(true);
   }
   const login = async (email, password) => {

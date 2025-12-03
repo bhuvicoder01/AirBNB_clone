@@ -27,6 +27,10 @@ const Home = () => {
         navigate('/host/dashboard');
         return; 
       }
+      if(user.role==='admin'){
+        navigate('/admin/dashboard');
+        return;
+      }
     }
   }, [user]);
 

@@ -6,7 +6,7 @@ import RegisterForm from '../components/user/RegisterForm';
 
 const Register = () => {
   const navigate = useNavigate();
-  const { register,user,logout } = useAuth();
+  const { register,user,logout,isAuthenticated } = useAuth();
   const { t } = useLanguage();
 
    useEffect(()=>{
@@ -14,7 +14,7 @@ const Register = () => {
       console.log('logging out')
       logout()
     }
-    if(localStorage.getItem('user')||user!==null){
+    if((localStorage.getItem('user')||user!==null) && isAuthenticated){
       // console.log(user)
       navigate('/')
     }

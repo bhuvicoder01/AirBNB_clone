@@ -4,6 +4,8 @@ import { reviewAPI } from '../../services/api';
 import Button from '../common/Button';
 import { useAuth } from '../../contexts/AuthContext';
 import Toast from '../common/Toast';
+import { useReview } from '../../contexts/ReviewContext';
+import Loading from '../common/Loading';
 
 // Mock reviews data
 const mockReviews = [
@@ -37,6 +39,7 @@ const mockReviews = [
 ];
 
 const ReviewsList = ({ propertyId, limit = 2 }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const {user,isAuthenticated} = useAuth();
   const [showAll, setShowAll] = useState(false);
   const [reviews,setReviews] = useState([]); 
@@ -47,18 +50,24 @@ const ReviewsList = ({ propertyId, limit = 2 }) => {
   const [toastMessage,setToastMessage]=useState('');
   const [toastType,setToastType]=useState('primary');
   const [review,setReview]=useState({});
+  const {getReviewsByPropertyId,addReview,deleteReview,addHostResponse,deleteHostResponse}=useReview();
+  const [showDeleteAlertModal,setShowDeleteAlertModal]=useState(false);
+
 
   const getReviews=async()=>{
     try {
-      const response = await reviewAPI.getByProperty(propertyId);
-      setReviews(response.data);
+      setIsLoading(true);
+      const response =await getReviewsByPropertyId(propertyId);
+      setReviews(response);
       // console.log(response.data);
+      setIsLoading(false);
     } catch (error) {
       console.error('Error fetching review analytics:', error);
     }
   }
 
   const postReview=async(e)=>{
+    setIsLoading(true);
     e.preventDefault();
     setShowReviewModal(false);
     try {
@@ -80,6 +89,8 @@ const ReviewsList = ({ propertyId, limit = 2 }) => {
       setReviews(response.data.reviews);
       getReviews();
       setShowToast(true);
+      setToastType('success');
+      setIsLoading(false);
       setToastMessage('Review submitted successfully!');
     } catch (error) {
       setShowToast(true);
@@ -90,6 +101,7 @@ const ReviewsList = ({ propertyId, limit = 2 }) => {
   }
 
   const postResponse=async(e)=>{
+    setIsLoading(true);
     e.preventDefault();
     setShowReviewModal(false);
     try {
@@ -98,10 +110,13 @@ const ReviewsList = ({ propertyId, limit = 2 }) => {
     }
       setShowToast(true);
     setToastMessage('Submitting your response...');
-      const response = await reviewAPI.update(review._id,user._id,responseData);
-      setReviews(response.data.reviews);
+      const response = await addHostResponse(review._id,user._id,responseData);
+      // setReviews(response);
       getReviews();
       setShowToast(true);
+      setToastType('success');
+      
+      if(reviews){setIsLoading(false);}
       setToastMessage('Response submitted successfully!');
     } catch (error) {
       setShowToast(true);
@@ -111,17 +126,23 @@ const ReviewsList = ({ propertyId, limit = 2 }) => {
     }
   }
 
-  const deleteResponse=async()=>{
+  const deleteResponse=async(reviewId)=>{
+    if (!reviewId) return;
+    setIsLoading(true);
     try {
       setShowToast(true); 
     setToastMessage('Deleting your response...');
-      const response = await reviewAPI.deleteHostResponse(review._id,user._id);
+      await deleteHostResponse(reviewId,user._id);
       getReviews();
+      setShowToast(true);
+      setToastType('success');
+      setToastMessage('Response deleted successfully!');
     } catch (error) {
       setShowToast(true);
       setToastType('error');
       setToastMessage(error.response.data.message || 'Error deleting your response.');
       console.error('Error deleting review response:', error);
+      setIsLoading(false);
     }
   }
 
@@ -144,6 +165,12 @@ const ReviewsList = ({ propertyId, limit = 2 }) => {
     </div>
   );
 
+if(isLoading){
+  return (
+    <Loading/>
+
+  )
+}
   return (
     <>
    {user?.role !== 'host' &&  <Button variant="secondary" onClick={()=>setShowReviewModal(true)}>Write a Review</Button>}
@@ -165,7 +192,7 @@ const ReviewsList = ({ propertyId, limit = 2 }) => {
 
         {/* Reviews */}
         <div className="row g-4">
-          {displayReviews?.map((review) => (
+          {displayReviews!=='undefined' && displayReviews.map((review) => (
             <div key={review._id} className="col-md-6">
               <div className="review-item">
                 {/* User Info */}
@@ -218,10 +245,20 @@ const ReviewsList = ({ propertyId, limit = 2 }) => {
                     <p className="small fw-semibold mb-1">Response from host:</p>
                     <p className="small text-muted mb-0">{review.hostResponse}</p>
                    {user?.role === 'host' && review.hostId === user._id && <i className="bi bi-dash-circle-fill text-muted" onClick={()=>{
-                      setReview(review);
-                      deleteResponse()}}></i>}
+                      setShowDeleteAlertModal(true)}}></i>}
                   </div>
+                  
                 )}
+                 <Modal show={showDeleteAlertModal} onClose={()=>setShowDeleteAlertModal(false)} title="Confirm Delete">
+        <p>Are you sure you want to delete this response?</p>
+        <div className="d-flex justify-content-end gap-2">
+          <Button onClick={()=>setShowDeleteAlertModal(false)} >Cancel</Button>
+          <Button variant="danger" onClick={() => {
+            deleteResponse(review._id);
+            setShowDeleteAlertModal(false);
+          }}>Delete</Button>
+        </div>
+      </Modal>
               </div>
             </div>
           ))}
@@ -276,6 +313,7 @@ const ReviewsList = ({ propertyId, limit = 2 }) => {
       </form>}
       </Modal>
       <Toast show={showToast} message={toastMessage} type={toastType} position='bottom-center' onClose={()=>setShowToast(false)}  />
+       
   </>
   );
 };
