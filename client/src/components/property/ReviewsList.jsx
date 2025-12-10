@@ -192,7 +192,7 @@ if(isLoading){
 
         {/* Reviews */}
         <div className="row g-4">
-          {displayReviews!=='undefined' && displayReviews.map((review) => (
+          {displayReviews&&displayReviews!=='undefined' && displayReviews?.map((review) => (
             <div key={review._id} className="col-md-6">
               <div className="review-item">
                 {/* User Info */}
