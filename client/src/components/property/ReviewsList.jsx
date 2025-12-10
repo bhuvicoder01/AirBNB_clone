@@ -198,14 +198,14 @@ if(isLoading){
                 {/* User Info */}
                 <div className="d-flex align-items-center mb-3">
                   <img
-                    src={review.userAvatar}
-                    alt={review.userName}
+                    src={review?.userAvatar}
+                    alt={review?.userName}
                     className="rounded-circle me-3"
                     style={{ width: '48px', height: '48px' }}
                   />
                   <div>
-                    <h6 className="mb-0">{review.userName}</h6>
-                    <small className="text-muted">{new Date(review.createdAt).toLocaleDateString()}</small>
+                    <h6 className="mb-0">{review?.userName}</h6>
+                    <small className="text-muted">{new Date(review?.createdAt).toLocaleDateString()}</small>
                   </div>
                 </div>
 
@@ -214,18 +214,18 @@ if(isLoading){
                   {[...Array(5)].map((_, i) => (
                     <i
                       key={i}
-                      className={`bi bi-star${i < review.rating ? '-fill' : ''} ${
-                        i < review.rating ? 'text-warning' : 'text-muted'
+                      className={`bi bi-star${i < review?.rating ? '-fill' : ''} ${
+                        i < review?.rating ? 'text-warning' : 'text-muted'
                       }`}
                     ></i>
                   ))}
                 </div>
 
                 {/* Comment */}
-                <p className="text-muted mb-2">{review.comment}</p>
+                <p className="text-muted mb-2">{review?.comment}</p>
 
                 {/*Button for host to respond to review */}
-                {user?.role==='host' && !review.hostResponse && (
+                {user?.role==='host' && !review?.hostResponse && (
                   <Button 
                   className='btn-secondary  btn-outline-secondary text-decoration-none'
                     variant="link"
@@ -240,10 +240,10 @@ if(isLoading){
                 )}
 
                 {/* Host Response */}
-                {review.hostResponse && (
+                {review?.hostResponse && (
                   <div className="ms-4 mt-3 p-3 bg-light rounded">
                     <p className="small fw-semibold mb-1">Response from host:</p>
-                    <p className="small text-muted mb-0">{review.hostResponse}</p>
+                    <p className="small text-muted mb-0">{review?.hostResponse}</p>
                    {user?.role === 'host' && review.hostId === user._id && <i className="bi bi-dash-circle-fill text-muted" onClick={()=>{
                       setShowDeleteAlertModal(true)}}></i>}
                   </div>

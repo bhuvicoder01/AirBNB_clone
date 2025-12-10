@@ -1,9 +1,5 @@
 const propertyModel = require("../models/Property");
 const cloudinary = require('../services/cloudinary');
-const { unlink } = require('fs').promises;
-const sharp = require('sharp');
-const path = require('path');
-const fs = require('fs').promises;
 const { cleanup, compressImage } = require('../utils/imageProcessors');
 
 // Maximum file size for Cloudinary free tier (10MB)

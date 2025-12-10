@@ -1,3 +1,8 @@
+const { unlink } = require('fs').promises;
+const sharp = require('sharp');
+const path = require('path');
+const fs = require('fs').promises;
+
 const cleanup = async (files, compressedFiles = []) => {
             if (!files) return;
             const allFiles = [...files, ...compressedFiles];

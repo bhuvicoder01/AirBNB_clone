@@ -93,9 +93,9 @@ const PropertyDetailsPage = () => {
           <div className="py-4">
             <h5 className="mb-3">
               <i className="bi bi-star-fill me-2"></i>
-              {property.rating.overall} · {property.reviews_count} reviews
+              {property?.rating?.overall} · {property?.reviews_count} reviews
             </h5>
-            <ReviewsList propertyId={property._id} />
+            <ReviewsList propertyId={property?._id} />
           </div>
         </div>
 
