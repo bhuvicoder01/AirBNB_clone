@@ -2,8 +2,7 @@ const propertyModel = require("../models/Property");
 const cloudinary = require('../services/cloudinary');
 const { cleanup, compressImage } = require('../utils/imageProcessors');
 
-// Maximum file size for Cloudinary free tier (10MB)
-const MAX_FILE_SIZE = 10 * 1024 * 1024;
+
 
 class propertyController {
     // General property endpoints

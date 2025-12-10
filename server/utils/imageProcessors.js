@@ -3,6 +3,9 @@ const sharp = require('sharp');
 const path = require('path');
 const fs = require('fs').promises;
 
+// Maximum file size for Cloudinary free tier (10MB)
+const MAX_FILE_SIZE = 10 * 1024 * 1024;
+
 const cleanup = async (files, compressedFiles = []) => {
             if (!files) return;
             const allFiles = [...files, ...compressedFiles];
