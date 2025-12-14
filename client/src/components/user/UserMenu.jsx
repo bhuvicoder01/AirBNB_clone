@@ -98,7 +98,7 @@ const UserMenu = () => {
 
               <div className="py-2">
                 <Link
-                  to="/register"
+                  to="/apply/host"
                   className="dropdown-item px-3 py-2 d-block text-decoration-none text-dark"
                   onClick={() => setShowMenu(false)}
                 >
