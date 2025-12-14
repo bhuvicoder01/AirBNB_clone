@@ -4,7 +4,7 @@ const userController = require('../controllers/userController');
 const wishlistController = require('../controllers/wishListController');
 // const upload = require('../middleware/upload');
 const router = express.Router();
-const upload =require('../services/upload')
+const {upload,getUploadUrl} =require('../services/s3')
 
 
 // Protect all routes below with auth middleware if required

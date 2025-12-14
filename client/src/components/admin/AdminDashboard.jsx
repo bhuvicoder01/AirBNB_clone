@@ -7,15 +7,24 @@ import AdminListings from "./AdminListings";
 import AdminDashboardQuickDetails from "./AdminDashboardQuickDetails";
 import AdminBookings from "./AdminBookings";
 import AdminUsers from "./AdminUsers";
+import { useNavigate } from "react-router-dom";
+import NotFound from "../../pages/NotFound";
 
 const AdminDashboard = () => {
     const {user}=useAuth()
+    const navigate=useNavigate()
     if(!localStorage.getItem("adminActiveTab")){
         localStorage.setItem("adminActiveTab","dashboard")
 }
    const activeTab=(localStorage.getItem("adminActiveTab")||'dashboard')
  
-    return (
+   useEffect(()=>{
+      if(user?.role!='admin'){
+         navigate('/')
+      }
+
+   },[user])
+   return user?.role==='admin'? (
        <>
        <div className="d-flex admin-dashboard column">
         
@@ -38,7 +47,12 @@ const AdminDashboard = () => {
 </div>
        
        </>
-    );
+    ):<>
+    <div>
+      <NotFound/>
+    </div>
+    
+    </>;
 }
 
 export default AdminDashboard;

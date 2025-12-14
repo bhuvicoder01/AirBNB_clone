@@ -50,6 +50,10 @@ app.use('/api/bookings',bookingRoutes)
 app.use('/api/payments',paymentRoutes)
 app.use('/api/reviews',reviewRoutes)
 
+const videoRoutes=require('./routes/video')
+
+app.use('/api/videos',videoRoutes)
+
 
 app.use('/api',async (req,res) => {
     res.send("Welcome to AirBnB Server 🤠")

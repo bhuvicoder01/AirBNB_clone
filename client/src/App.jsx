@@ -27,6 +27,7 @@ import PaymentPage from './pages/Payment';
 import PropertyReviewForm from './components/property/PropertyReviewForm';
 import ApplyHost from './pages/ApplyHost';
 import AdminDashboard from './components/admin/AdminDashboard';
+import VideoUploader from './components/common/VideoUploader';
 
 
 function App() {
@@ -65,6 +66,7 @@ function App() {
                   <Route path="/wishlist" element={<Wishlist />} />
                   <Route path='/profile' element={<ProfileCard/>}/>
                   <Route path="*" element={<NotFound />} />
+                  <Route path='/videos' element={<VideoUploader/>}/>
                 </Route>
               </Routes>
                 </ReviewProvider>

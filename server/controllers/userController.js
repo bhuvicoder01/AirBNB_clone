@@ -54,11 +54,11 @@ try{
         const avatar=req.file
         // console.log(avatar)
         if(avatar){
-             const result=await cloudinary.uploader.upload(avatar.path,{folder:'avatars'})
+            //  const result=await cloudinary.uploader.upload(avatar.path,{folder:'avatars'})
         await userModel.updateOne({_id:id},
-            {$set:{firstName,lastName,email,role,avatar:{public_id:result?.public_id,url:result?.secure_url}}}, 
+            {$set:{firstName,lastName,email,role,avatar:{public_id:avatar.bucket,url:avatar.location}}}, 
             { upsert: false })
-        await propertyModel.updateMany({hostId:id},{'host.avatar':result?.secure_url}
+        await propertyModel.updateMany({hostId:id},{'host.avatar':avatar.location}
             ,{ upsert: false }
         )   
         }

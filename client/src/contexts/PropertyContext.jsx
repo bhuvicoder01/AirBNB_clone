@@ -64,6 +64,8 @@ export const PropertyProvider = ({ children }) => {
   const searchProperties = useCallback((searchFilters) => {
     let filtered = properties;
 
+    filtered=filtered.filter(p=>p.isActive)
+
     if (searchFilters.location) {
       filtered = filtered.filter(p => 
         p.location?.city?.toLowerCase().includes(searchFilters.location.toLowerCase()) ||

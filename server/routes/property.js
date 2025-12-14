@@ -1,6 +1,6 @@
 const express = require('express');
 const propertyController = require('../controllers/propertyController');
-const upload =require('../services/upload')
+const {upload,getUploadUrl} =require('../services/s3')
 
 
 const router = express.Router();
@@ -18,5 +18,7 @@ router.get('/host/properties', propertyController.getHostProperties);
 router.put('/:id', upload.array('images',10),propertyController.updateProperty);
 router.patch('/:id/toggle-status', propertyController.togglePropertyStatus);
 router.delete('/:id', propertyController.deleteProperty);
+
+router.get("/api/s3/upload-url", getUploadUrl);
 
 module.exports = router;
