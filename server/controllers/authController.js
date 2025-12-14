@@ -189,7 +189,8 @@ class authController{
         catch(error){
             console.error(error)
             res.status(500).json({
-                message:`server error`
+                message:`server error`,
+                error:error
             })
         }
     }
