@@ -6,6 +6,8 @@ import api from "../../services/api";
 function VideoListPlayer() {
   const [videos, setVideos] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
+  const API_URL = import.meta.env.VITE_API_URL||'https://airbnb-clone-2cp7.onrender.com/api';
+
 
   useEffect(() => {
     const loadVideos = async () => {
@@ -30,7 +32,7 @@ function VideoListPlayer() {
             key={selectedId} // force reload when id changes
             controls
             width="640"
-            src={`http://localhost:5000/api/videos/stream/${selectedId}`}
+            src={`${API_URL}/videos/stream/${selectedId}`}
           >
             Your browser does not support the video tag.
           </video>
