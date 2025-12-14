@@ -47,7 +47,8 @@ function App() {
 
                 <Route path="/admin/dashboard" element={<AdminDashboard />} />
 
-                
+                <Route path='/videos' element={<VideoUploader/>}/>
+
                 {/* All other routes with Layout */}
                 <Route element={<Layout />}>
                   <Route path='/payment' element={<PaymentPage/>}/>
@@ -66,7 +67,6 @@ function App() {
                   <Route path="/wishlist" element={<Wishlist />} />
                   <Route path='/profile' element={<ProfileCard/>}/>
                   <Route path="*" element={<NotFound />} />
-                  <Route path='/videos' element={<VideoUploader/>}/>
                 </Route>
               </Routes>
                 </ReviewProvider>

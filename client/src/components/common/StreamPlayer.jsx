@@ -4,8 +4,10 @@ import api from "../../services/api";
 function VideoListPlayer() {
   const [videos, setVideos] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
+  const videoRef = useRef(null);
   const containerRef = useRef(null);
   const API_URL = import.meta.env.VITE_API_URL || 'https://airbnb-clone-2cp7.onrender.com/api';
 
@@ -25,22 +27,39 @@ function VideoListPlayer() {
       } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
         e.preventDefault();
         goToPrev();
+      } else if (e.key === ' ') {
+        e.preventDefault();
+        togglePlayPause();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentIndex, videos.length]);
+  }, [currentIndex, videos.length, isPlaying]);
 
   const goToNext = () => {
     setCurrentIndex((prev) => (prev + 1) % videos.length);
+    setIsPlaying(true);
   };
 
   const goToPrev = () => {
     setCurrentIndex((prev) => (prev - 1 + videos.length) % videos.length);
+    setIsPlaying(true);
+  };
+
+  const togglePlayPause = () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
   };
 
   const handleTouchStart = (e) => {
     setTouchStart(e.targetTouches[0].clientY);
+    setTouchEnd(e.targetTouches[0].clientY);
   };
 
   const handleTouchMove = (e) => {
@@ -48,8 +67,14 @@ function VideoListPlayer() {
   };
 
   const handleTouchEnd = () => {
-    if (touchStart - touchEnd > 50) goToNext();
-    if (touchStart - touchEnd < -50) goToPrev();
+    const diff = touchStart - touchEnd;
+    if (Math.abs(diff) < 10) {
+      togglePlayPause();
+    } else if (diff > 50) {
+      goToNext();
+    } else if (diff < -50) {
+      goToPrev();
+    }
   };
 
   if (videos.length === 0) return <div style={styles.loading}>Loading videos...</div>;
@@ -71,6 +96,7 @@ function VideoListPlayer() {
           }}
         >
           <video
+            ref={index === currentIndex ? videoRef : null}
             src={`${API_URL}/videos/stream/${video.id}`}
             style={styles.video}
             autoPlay={index === currentIndex}
@@ -78,6 +104,11 @@ function VideoListPlayer() {
             playsInline
             muted={index !== currentIndex}
           />
+          {index === currentIndex && (
+            <div style={styles.playPauseIcon}>
+              {isPlaying ? '⏸' : '▶️'}
+            </div>
+          )}
           <div style={styles.info}>
             <h3>{video.key}</h3>
             <p>{new Date(video.createdAt).toLocaleDateString()}</p>
@@ -133,6 +164,17 @@ const styles = {
     alignItems: 'center',
     height: '100vh',
     fontSize: 18,
+  },
+  playPauseIcon: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    fontSize: 60,
+    color: '#fff',
+    opacity: 0,
+    animation: 'fadeInOut 0.5s',
+    pointerEvents: 'none',
   },
 };
 
