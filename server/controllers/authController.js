@@ -2,6 +2,13 @@ const userModel =require('../models/User');
 const encrypt = require("../services/passwordEncrypt");
 const cloudinary=require('../services/cloudinary')
 const bcrypt=require('bcrypt')
+const {OAuth2Client}=require('google-auth-library')
+
+const oAuth2Client = new OAuth2Client(
+  process.env.GOOGLE_CLIENT_ID,
+  process.env.GOOGLE_CLIENT_SECRET,
+  process.env.GOOGLE_REDIRECT_URI // match what you used in Google Cloud
+);
 
 class authController{
     static checkAuth=async (req,res) => {
@@ -75,6 +82,114 @@ class authController{
         else{
             return res.status(400).json({
                 message:"credentials doesn't match"
+            })
+        }
+    }
+
+    static googleAuth=async(req, res)=>{
+        try{
+            const {code}=req.body
+            if(!code){
+                return res.status(400).json({
+                    message:"code is required"
+                })
+            }
+
+            const {tokens}=await oAuth2Client.getToken({
+                code,
+                redirect_uri:`${process.env.GOOGLE_REDIRECT_URI}`
+            })
+
+            const ticket=await oAuth2Client.verifyIdToken({
+                idToken:tokens.id_token,
+                audience:`${process.env.GOOGLE_CLIENT_ID}`
+            })
+
+            const payload=ticket.getPayload()
+            const {name,email,picture,sub:googleId}=payload
+            
+            let user={name,email,picture,googleId};
+            
+           
+            const userInDatabase=await userModel.findOne({email})
+            if(userInDatabase){
+                 const userData={
+                    _id:userInDatabase._id,
+                    firstName:userInDatabase.firstName,
+                    lastName:userInDatabase.lastName,
+                    email:userInDatabase.email,
+                    avatar:{url:userInDatabase.avatar.url},
+                    googleId:userInDatabase?.googleId,
+                    role:userInDatabase.role,
+                    createdAt:userInDatabase.createdAt,
+                    updatedAt:userInDatabase.updatedAt
+                }
+                res.json({
+                user:userData,
+                message:"success login using google-oauth",
+                isNewUser:false,
+                success:true
+                
+            })   
+            }
+            
+            else{
+                   const firstName=name.split(' ')[0]
+                   const lastName=name.split(' ')[1]
+                   const password=await encrypt(`${firstName}123`)
+                const newUser=await userModel.create({
+                    firstName:firstName,
+                    lastName:lastName,
+                    email:email,
+                    password:password,
+                    googleId:googleId,
+                   'avatar.url':picture
+                })
+                const userData={
+                    _id:newUser._id,
+                    firstName:newUser.firstName,
+                    lastName:newUser.lastName,
+                    email:newUser.email,
+                    avatar:{url:newUser.avatar.url},
+                    googleId:newUser.googleId,
+                    role:newUser.role,
+                    createdAt:newUser.createdAt,
+                    updatedAt:newUser.updatedAt
+                }
+                res.json({
+                    user:userData,
+                    message:"success created new user",
+                    isNewUser:true,
+                    success:true
+                })
+            }
+
+            
+            // const user=await userModel.findOne({email:email})
+            // if(user){
+            //     return res.json({
+            //         user:user,
+            //         message:"success"
+            //     })
+            // }
+            // else{
+            //     const newUser=await userModel.create({
+            //         firstName:name,
+            //         email:email,
+            //         googleId:googleId,
+            //         imageUrl:imageUrl,
+            //         role:"guest"
+            //     })
+            //     return res.json({
+            //         user:newUser,
+            //         message:"success"
+            //     })
+            // }
+        }
+        catch(error){
+            console.error(error)
+            res.status(500).json({
+                message:`server error`
             })
         }
     }

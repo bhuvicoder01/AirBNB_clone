@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import Input from '../common/Input';
 import Button from '../common/Button';
+import { useGoogleLogin } from '@react-oauth/google';
+import axios from 'axios';
+import api from '../../services/api';
+import Toast from '../common/Toast';
+import { useAuth } from '../../contexts/AuthContext';
 
 const LoginForm = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -8,6 +13,7 @@ const LoginForm = ({ onSubmit }) => {
     password: ''
   });
   const [loading, setLoading] = useState(false);
+  const {setUser,setIsAuthenticated}=useAuth()
 
   const handleChange = (e) => {
     setFormData({
@@ -28,6 +34,35 @@ const LoginForm = ({ onSubmit }) => {
       setLoading(false);
     }
   };
+
+  const googleLogin=useGoogleLogin({
+    flow:'auth-code',
+    onSuccess:async({code})=>{
+      try {
+        console.log(code)
+        const res=await api.post('/auth/google',{code},
+          {
+            headers:{
+              'Content-Type':'application/json'
+            }
+          }
+        )
+        console.log(res.data)
+        if(res.data.success){
+         setUser(res.data.user)
+         localStorage.setItem('user',JSON.stringify(res.data.user))
+         setIsAuthenticated(true)
+        }
+        // if(res.data.isNewUser){
+         
+        // }
+        
+      } catch (error) {
+        console.log(error)
+        
+      }
+    }
+  })
 
   return (
     <form onSubmit={handleSubmit}>
@@ -87,7 +122,7 @@ const LoginForm = ({ onSubmit }) => {
       </div>
 
       {/* Social Login Buttons */}
-      <button type="button" className="btn btn-outline-dark w-100 mb-2">
+      <button type="button" onClick={googleLogin} className="btn btn-outline-dark w-100 mb-2">
         <i className="bi bi-google me-2"></i>
         Continue with Google
       </button>

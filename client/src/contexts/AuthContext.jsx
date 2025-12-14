@@ -135,7 +135,9 @@ if(!formData){
     login,
     register,
     logout,
-    updateProfile
+    updateProfile,
+    setUser,
+    setIsAuthenticated
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

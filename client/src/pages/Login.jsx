@@ -28,7 +28,6 @@ const Login = () => {
 
   const handleLogin = async (credentials) => {
     try {
-      console.log(credentials)
       const user=await login(credentials.email, credentials.password);
       if(user){
         if(user.role==='host'){
