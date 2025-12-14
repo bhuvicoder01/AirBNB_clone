@@ -116,8 +116,49 @@ body {
 .date-range-picker {
   max-height: 600px;
   overflow-y: auto;
+  z-index: 10000;
 }
 
+.search-bar {
+  position: relative;
+  z-index: 100;
+}
+
+.search-bar .position-relative {
+  overflow: visible !important;
+}
+
+.guest-counter {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 320px;
+  position: relative;
+  z-index: 10001 !important;
+}
+
+.guest-counter .btn-outline-secondary {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-color: #b0b0b0;
+  color: var(--dark-gray);
+}
+
+.guest-counter .btn-outline-secondary:hover:not(:disabled) {
+  background-color: #f7f7f7;
+  border-color: var(--dark-gray);
+}
+
+.guest-counter .btn-outline-secondary:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
 /* Modal enhancements */
 .modal.d-block {
   animation: slideIn 0.3s ease-out;

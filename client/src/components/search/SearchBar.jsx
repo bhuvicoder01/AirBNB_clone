@@ -82,7 +82,7 @@ const SearchBar = ({ compact = false }) => {
 
         {/* Dates */}
         <div className="col-md-4 position-relative">
-          <div className="p-3 " onClick={() => setShowDatePicker(!showDatePicker)}>
+          <div className="p-3 " onClick={() => setShowDatePicker(!showDatePicker)} style={{ cursor: 'pointer' }}>
             <label className="small fw-semibold">Check in / Check out</label>
             <div className="text-muted small">
               {dates?.checkIn && dates?.checkOut 
@@ -106,8 +106,8 @@ const SearchBar = ({ compact = false }) => {
             </div>
           </div>
           {showGuestPicker && (
-            <div className="position-absolute top-100 mt-2 bg-white shadow-lg rounded p-3 z-3">
-              <GuestCounter isOpen={showGuestPicker} value={guests} onChange={setGuests} />
+            <div className="position-absolute top-100 mt-2" style={{zIndex: 10000}}>
+              <GuestCounter isOpen={showGuestPicker} value={guests} onChange={setGuests} onClose={()=>setShowGuestPicker(false)} />
             </div>
           )}
         </div>

@@ -76,7 +76,7 @@ const Navbar = () => {
 
       {/* Mobile Search Bar */}
       {showSearchBar && (
-        <div className="d-md-none p-3 "style={{backgroundColor:'transparent'}}>
+        <div className="position-absolute top-100 w-100 d-md-none p-3 "style={{backgroundColor:'transparent'}}>
           <SearchBar />
         </div>
       )}

@@ -1,7 +1,6 @@
 import React from 'react';
 
-const GuestCounter = ({isOpen=false, value, onChange }) => {
-  const [isOpenState, setIsOpenState] = React.useState(isOpen);
+const GuestCounter = ({isOpen=false, value, onChange,onClose }) => {
   const increment = (type) => {
     onChange({ ...value, [type]: value[type] + 1 });
   };
@@ -11,9 +10,22 @@ const GuestCounter = ({isOpen=false, value, onChange }) => {
       onChange({ ...value, [type]: value[type] - 1 });
     }
   };
+    const handleClose = () => {
+    onClose && onClose();
+  };
 
   return (<>
-    {isOpenState && <div className="guest-counter" onMouseLeave={() => setIsOpenState(false)} style={{ minWidth: '300px' }}>
+    {isOpen &&  <div className="guest-counter">
+      <div className="d-flex justify-content-between column p-2">
+                <h5 className=""style={{fontSize:'small'}}>
+                 Set Guests
+                </h5>
+                <button 
+                  type="button" 
+                  className="btn-close" 
+                  onClick={handleClose}
+                ></button>
+              </div>
       <div className="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
         <div>
           <div className="fw-semibold">Adults</div>
