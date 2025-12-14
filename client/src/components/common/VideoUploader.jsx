@@ -5,7 +5,7 @@ import VideoListPlayer from "./StreamPlayer";
 
 function VideoUploader() {
   const [progress, setProgress] = useState(0);
-  const [videoUrl, setVideoUrl] = useState("");
+  // const [videoUrl, setVideoUrl] = useState("");
 
   const handleChange = async (e) => {
   try{  const file = e.target.files[0];
@@ -28,7 +28,7 @@ function VideoUploader() {
       }
     });
 
-    setVideoUrl(fileUrl); // save to DB if you need to associate with user etc.
+    // setVideoUrl(fileUrl); // save to DB if you need to associate with user etc.
     }
     catch(error){
       alert(error)
@@ -41,7 +41,7 @@ function VideoUploader() {
     <div>
       <input type="file" accept="video/*" onChange={handleChange} />
       {progress > 0 && <p>Upload: {progress}%</p>}
-      {videoUrl && <video src={videoUrl} controls width="400" />}
+      {/* {videoUrl && <video src={videoUrl} controls width="400" />} */}
     </div>
 
     {/* {<VideoUploader/>} */}
