@@ -39,7 +39,7 @@ const LoginForm = ({ onSubmit }) => {
     flow:'auth-code',
     onSuccess:async({code})=>{
       try {
-        console.log(code)
+        // console.log(code)
         const res=await api.post('/auth/google',{code},
           {
             headers:{
@@ -47,7 +47,7 @@ const LoginForm = ({ onSubmit }) => {
             }
           }
         )
-        console.log(res.data)
+        // console.log(res.data)
         if(res.data.success){
          setUser(res.data.user)
          localStorage.setItem('user',JSON.stringify(res.data.user))
