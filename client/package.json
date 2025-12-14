@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@googlemaps/js-api-loader": "^2.0.2",
+    "@react-oauth/google": "^0.12.2",
     "axios": "^1.6.2",
     "date-fns": "^3.0.0",
     "googlemaps": "^1.12.0",
