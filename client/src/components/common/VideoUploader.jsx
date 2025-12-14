@@ -8,7 +8,7 @@ function VideoUploader() {
   const [videoUrl, setVideoUrl] = useState("");
 
   const handleChange = async (e) => {
-    const file = e.target.files[0];
+  try{  const file = e.target.files[0];
     if (!file) return;
 
     // 1. Ask backend for presigned URL
@@ -29,6 +29,11 @@ function VideoUploader() {
     });
 
     setVideoUrl(fileUrl); // save to DB if you need to associate with user etc.
+    }
+    catch(error){
+      alert(error)
+
+    }
   };
 
   return (
