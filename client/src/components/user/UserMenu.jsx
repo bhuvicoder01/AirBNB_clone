@@ -97,13 +97,13 @@ const UserMenu = () => {
             
 
               <div className="py-2">
-                <Link
+                {user?.role==='guest' &&<Link
                   to="/apply/host"
                   className="dropdown-item px-3 py-2 d-block text-decoration-none text-dark"
                   onClick={() => setShowMenu(false)}
                 >
                   Wandora your home
-                </Link>
+                </Link>}
                 <Link
                   to="/help"
                   className="dropdown-item px-3 py-2 d-block text-decoration-none text-dark"
