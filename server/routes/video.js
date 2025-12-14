@@ -52,7 +52,7 @@ router.get("/stream/:id", async (req, res) => {
     );
     const videoSize = headData.ContentLength;
 
-    const CHUNK_SIZE = 2 * 1024 * 1024; // 1 MB
+    const CHUNK_SIZE = 3 * 1024 * 1024; // 3 MB
     const start = Number(range.replace(/\D/g, ""));
     const end = Math.min(start + CHUNK_SIZE, videoSize - 1);
     const contentLength = end - start + 1;
