@@ -97,7 +97,7 @@ class authController{
 
             const {tokens}=await oAuth2Client.getToken({
                 code,
-                redirect_uri:`${process.env.GOOGLE_REDIRECT_URI}`
+                redirect_uri:`${process.env.NODE_ENV==='Development'?`${process.env.GOOGLE_REDIRECT_URI_DEV}`:`${process.env.GOOGLE_REDIRECT_URI_PROD}`}`
             })
 
             const ticket=await oAuth2Client.verifyIdToken({
@@ -108,12 +108,11 @@ class authController{
             const payload=ticket.getPayload()
             const {name,email,picture,sub:googleId}=payload
             
-            let user={name,email,picture,googleId};
-            
            
             const userInDatabase=await userModel.findOne({email})
             if(userInDatabase){
                 if(!userInDatabase.googleId){
+                    // console.log('updating google id')
                     userInDatabase.googleId=googleId
                     await userInDatabase.save()
                 }
@@ -123,7 +122,7 @@ class authController{
                     lastName:userInDatabase.lastName,
                     email:userInDatabase.email,
                     avatar:{url:userInDatabase.avatar.url},
-                    googleId:userInDatabase?.googleId,
+                    // googleId:userInDatabase?.googleId,
                     role:userInDatabase.role,
                     createdAt:userInDatabase.createdAt,
                     updatedAt:userInDatabase.updatedAt
@@ -155,7 +154,7 @@ class authController{
                     lastName:newUser.lastName,
                     email:newUser.email,
                     avatar:{url:newUser.avatar.url},
-                    googleId:newUser.googleId,
+                    // googleId:newUser.googleId,
                     role:newUser.role,
                     createdAt:newUser.createdAt,
                     updatedAt:newUser.updatedAt
