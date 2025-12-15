@@ -50,7 +50,7 @@ try{
         // console.log(req.file)
         const id=req.params.id
         const {role}=req?.body
-        console.log(role)
+        // console.log(role)
         const avatar=req.file
         // console.log(avatar)
         if(avatar){
