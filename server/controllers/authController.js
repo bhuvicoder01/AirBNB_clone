@@ -113,6 +113,10 @@ class authController{
            
             const userInDatabase=await userModel.findOne({email})
             if(userInDatabase){
+                if(!userInDatabase.googleId){
+                    userInDatabase.googleId=googleId
+                    await userInDatabase.save()
+                }
                  const userData={
                     _id:userInDatabase._id,
                     firstName:userInDatabase.firstName,
