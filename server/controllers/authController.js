@@ -97,7 +97,7 @@ class authController{
 
             const {tokens}=await oAuth2Client.getToken({
                 code,
-                redirect_uri:`${process.env.NODE_ENV==='Development'?`${process.env.GOOGLE_REDIRECT_URI_DEV}`:`${process.env.GOOGLE_REDIRECT_URI_PROD}`}`
+                redirect_uri:`${process.env.NODE_ENV==='development'?`${process.env.GOOGLE_REDIRECT_URI_DEV}`:`${process.env.GOOGLE_REDIRECT_URI_PROD}`}`
             })
 
             const ticket=await oAuth2Client.verifyIdToken({
