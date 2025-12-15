@@ -51,7 +51,7 @@ const Navbar = () => {
             className="text-decoration-none text-dark fw-semibold d-none d-lg-block host-link"
           >
             Become a Host
-          </Link>):(user.role==='admin' ?<Link 
+          </Link>):(user?.role==='admin' ?<Link 
             to="/admin/dashboard" 
             className="text-decoration-none bi bi-speedometer px-1 text-dark fw-bold d-none d-lg-block host-link"
           >
