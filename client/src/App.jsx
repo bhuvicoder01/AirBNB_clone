@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { PaymentProvider } from './contexts/PaymentContext';
 import { AuthProvider } from './contexts/AuthContext';
@@ -28,11 +28,14 @@ import PropertyReviewForm from './components/property/PropertyReviewForm';
 import ApplyHost from './pages/ApplyHost';
 import AdminDashboard from './components/admin/AdminDashboard';
 import VideoUploader from './components/common/VideoUploader';
+import Loading from './components/common/Loading';
+import VideoListPlayer from './components/common/StreamPlayer';
 
 
 function App() {
   return (
     <Router>
+      <Suspense fallback={<Loading />}>
       <LanguageProvider>
         <PaymentProvider>
           <AuthProvider>
@@ -47,10 +50,11 @@ function App() {
 
                 <Route path="/admin/dashboard" element={<AdminDashboard />} />
 
-                <Route path='/videos' element={<VideoUploader/>}/>
+                <Route path='/videos' element={<VideoListPlayer/>}/>
 
                 {/* All other routes with Layout */}
                 <Route element={<Layout />}>
+                <Route path='/upload/video' element={<VideoUploader/>}/>
                   <Route path='/payment' element={<PaymentPage/>}/>
                   <Route path="/" element={<Home />} />
                   <Route path="/search" element={<SearchResults />} />
@@ -76,6 +80,7 @@ function App() {
           </AuthProvider>
         </PaymentProvider>
       </LanguageProvider>
+      </Suspense>
     </Router>
   );
 }

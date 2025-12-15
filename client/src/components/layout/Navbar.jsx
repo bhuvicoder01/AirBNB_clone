@@ -63,12 +63,12 @@ const Navbar = () => {
           <span className='px-1'>Dashboard</span>
           </Link>)}
 {/* Mobile Search Button */}
-        <button 
+      {(user?.role!=='host' && user?.role!=='admin') && <button 
           className="btn btn-link d-md-none"
           onClick={() => setShowSearchBar(!showSearchBar)}
         >
           <i className="bi bi-search"></i>
-        </button>
+        </button>}
           {/* Language Selector */}
           <LanguageSelector />
 

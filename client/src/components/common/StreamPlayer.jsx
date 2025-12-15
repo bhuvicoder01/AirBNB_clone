@@ -5,6 +5,7 @@ function VideoListPlayer() {
   const [videos, setVideos] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
+  const [progress, setProgress] = useState(0);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
   const videoRef = useRef(null);
@@ -39,11 +40,13 @@ function VideoListPlayer() {
   const goToNext = () => {
     setCurrentIndex((prev) => (prev + 1) % videos.length);
     setIsPlaying(true);
+    setProgress(0);
   };
 
   const goToPrev = () => {
     setCurrentIndex((prev) => (prev - 1 + videos.length) % videos.length);
     setIsPlaying(true);
+    setProgress(0);
   };
 
   const togglePlayPause = () => {
@@ -103,6 +106,11 @@ function VideoListPlayer() {
             loop
             playsInline
             muted={index !== currentIndex}
+            onTimeUpdate={(e) => {
+              if (index === currentIndex) {
+                setProgress((e.target.currentTime / e.target.duration) * 100);
+              }
+            }}
           />
           {index === currentIndex && (
             <div style={styles.playPauseIcon}>
@@ -113,6 +121,11 @@ function VideoListPlayer() {
             <h3>{video.key}</h3>
             <p>{new Date(video.createdAt).toLocaleDateString()}</p>
           </div>
+          {index === currentIndex && (
+            <div style={styles.progressBar}>
+              <div style={{...styles.progress, width: `${progress}%`}}></div>
+            </div>
+          )}
         </div>
       ))}
       <div style={styles.indicator}>{currentIndex + 1} / {videos.length}</div>
@@ -157,6 +170,18 @@ const styles = {
     padding: '8px 12px',
     borderRadius: 20,
     fontSize: 14,
+  },
+  progressBar: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    width: '100%',
+    height: 4,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+  },
+  progress: {
+    height: '100%',
+    backgroundColor: '#fff',
   },
   loading: {
     display: 'flex',

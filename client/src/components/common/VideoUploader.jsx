@@ -38,14 +38,14 @@ function VideoUploader() {
 
   return (
     <>
+    
     <div>
       <input type="file" accept="video/*" onChange={handleChange} />
       {progress > 0 && <p>Upload: {progress}%</p>}
       {/* {videoUrl && <video src={videoUrl} controls width="400" />} */}
     </div>
-
-    {/* {<VideoUploader/>} */}
-    {<VideoListPlayer/>}
+    
+    {/* {<VideoListPlayer/>} */}
     
    
 

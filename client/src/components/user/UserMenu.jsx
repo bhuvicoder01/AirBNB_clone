@@ -60,7 +60,7 @@ const UserMenu = () => {
                 {/* <small className="text-muted">{user.email}</small> */}
               </div>
 
-              {user.role !== "host" && (
+              {(user?.role !== "host" && user?.role !== "admin" )&& (
                 <>
                   <div className="py-2">
                     <Link
